@@ -16,25 +16,8 @@ describe("resource_view_directive_test", function(){
 		$compile(elm)(scope);
 		scope.$digest();
 	}));
-
-	// it('request the facts for the given resource uri', function() {
-	// 	expect(false).toBe(true);
-	// });
 	
-	it('should create a wrapper div', function () {
-		var wrapper = elm.children('div.wrapper');
-		expect(wrapper.length).toBe(1);
-	});
-
-	it('should display nothing when the facts are missing', function () {
-		var wrapper = elm.children('div');
-		expect(wrapper.children().length).toBe(1);
-		expect(heading.html()).toBe('Tupac Shakur');
-	});
-
-	it('should display the label from the resource facts', function() {
-		console.log(elm);
-		var heading = elm.find('label.heading');
+	xit('should create a wrapper div when there are facts for the resource', function () {
 		scope.facts = {
 			"head": {
 				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
@@ -44,29 +27,87 @@ describe("resource_view_directive_test", function(){
 					{
 						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
 						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "Tupac Shakur" }
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
 					}
 				]
 			}
 		};
 		scope.$apply();
+
+		var wrapper = elm.find('div.wrapper');
+		expect(wrapper.length).toBe(1);
+	});
+
+	xit('should display nothing when there are no facts for the resource', function () {
+		var wrapper = elm.children('div');
+		//expect(wrapper.length).toBe(0);
+		expect(elm.is(':empty')).toBe(true);
+	});
+
+	it('should display the label from the resource facts', function() {
+		scope.facts = {
+			"head": {
+				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
+			},
+			"results": {
+				"bindings": [
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
+						"predicate_label": { "type": "literal" , "value": "label" },
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
+					}
+				]
+			}
+		};
+		scope.$apply();
+
+		var heading = elm.find('label.heading');
 		expect(heading.length).toBe(1);
-		expect(heading.html()).toBe('Tupac Shakur');
+		expect(heading.html()).toBe('A Sample Label');
 	});
 
-	xit('should display the depiction for the resource if available', function() {
-		expect(false).toBe(true);
+	it('should display the abstract from the resource facts', function() {
+		scope.facts = {
+			"head": {
+				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
+			},
+			"results": {
+				"bindings": [
+					{
+						"p": { "type": "uri" , "value": "http://dbpedia.org/ontology/abstract" },
+						"predicate_label": { "type": "literal" , "value": "has abstract" },
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Abstract" }
+					}
+				]
+			}
+		};
+		scope.$apply();
+
+		var heading = elm.find('p.abstract');
+		expect(heading.length).toBe(1);
+		expect(heading.html()).toBe('A Sample Abstract');
 	});
 
-	xit('should display the thumbnail for the resource when the depiction fails', function() {
-		expect(false).toBe(true);
+	xit('should display the resource facts using the typed-resource-view directive', function() {
+		scope.facts = {
+			"head": {
+				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
+			},
+			"results": {
+				"bindings": [
+					{
+						"p": { "type": "uri" , "value": "http://dbpedia.org/ontology/abstract" },
+						"predicate_label": { "type": "literal" , "value": "has abstract" },
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Abstract" }
+					}
+				]
+			}
+		};
+		scope.$apply();
+
+		var typedResourceView = elm.find('typed-resource-view');
+		expect(typedResourceView.length).toBe(1);
+		expect(typedResourceView.attr('resource')).toBe('facts');
 	});
 
-	xit('should hide the depiction/thumbnail if they fail to load', function() {
-		expect(false).toBe(true);
-	});
-
-	xit('should display the abstract for the resource', function() {
-		expect(false).toBe(true);
-	});
 });

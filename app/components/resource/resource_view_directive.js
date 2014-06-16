@@ -4,23 +4,29 @@
 	function dbpediaResourceView() {
 		return {
 			restrict: 'E',
-			replace: true,
-			template: '<div class="wrapper">' + 
-				'<label class="heading">{{heading}}</label>'+
-			'</div>',
+			template: 
+			//'<div class="wrapper" ng-if="results">' +
+				'<label class="heading">{{ heading }}</label>'+
+				'<p class="abstract">{{ abstract }}</p>',
+			//'</div>',
 			scope: {
 				resource: '='		//two-way parent scope binding
 			},
 			link: function (scope, element) {
-				if (scope.resource) {
+				scope.$watch('resource', function (newVal, oldVal) {
+					if (newVal) {
+						var bindings = scope.resource.results.bindings;
+						var labelNode = bindings.filter(function (item) {
+							return item.p.value === "http://www.w3.org/2000/01/rdf-schema#label";
+						})[0];
+						scope.heading = labelNode ? labelNode.o.value : "";
 
-				}
-
-				// console.log("RESOURCE", scope.resource);
-				// var bindings = scope.resource.results.bindings;
-				// scope.heading = bindings.filter(function (item) {
-				// 	return item.p.value === "http://www.w3.org/2000/01/rdf-schema#label";
-				// })[0];
+						var abstractNode = bindings.filter(function (item) {
+							return item.p.value === "http://dbpedia.org/ontology/abstract";
+						})[0];
+						scope.abstract = abstractNode ? abstractNode.o.value : "";
+					};
+				});
 			}
 		};
 	}
