@@ -1,6 +1,12 @@
 var gulp = require('gulp');
 var plugins = require("gulp-load-plugins")({lazy:false});
 
+gulp.task('copyDisplayConfigurations', function () {
+    //copy all the display configurations for types
+    gulp.src(['./app/assets/configurations/**/*.json'], { base: './app' })
+        .pipe(gulp.dest('./build'));
+});
+
 gulp.task('scripts', function(){
     //combine all js files of the app
     gulp.src(['!./app/**/*_test.js','./app/**/*.js'])
@@ -75,4 +81,4 @@ gulp.task('connect', plugins.connect.server({
     livereload: true
 }));
 
-gulp.task('default',['connect','scripts','templates','css','copy-index','vendorJS','vendorCSS','watch']);
+gulp.task('default',['connect','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
