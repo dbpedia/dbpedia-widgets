@@ -261,10 +261,89 @@ describe("resource_view_directive_test", function(){
 		$httpBackend.flush(3);
 
 		//make sure a list item is created for each dbpedia-typed-resource-view
-		var listItems = elm.find('li');
+		var listItems = elm.children('dbpedia-resource-view').children('ul').children('li');
 		expect(listItems.length).toBe(2);
 
 		var typedResourceViews = elm.find('dbpedia-typed-resource-view');
+		expect(typedResourceViews.length).toBe(2);
+	});
+
+	it('should pass the resource to dbpedia-typed-resource-view via the resource attribute', function() {
+		scope.facts = {
+			"head": {
+				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
+			},
+			"results": {
+				"bindings": [
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
+						"predicate_label": { "type": "literal" , "value": "label" },
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
+						"object_label": { "type": "literal" , "value": "Person" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
+						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
+					}
+				]
+			}
+		};
+		scope.$apply();
+		$httpBackend.flush(3);
+
+		var typedResourceViews = elm.find('dbpedia-typed-resource-view[resource="resource"]');
+		expect(typedResourceViews.length).toBe(2);
+	});
+
+
+	it('should pass the configuration to dbpedia-typed-resource-view via the configuration attribute', function() {
+		scope.facts = {
+			"head": {
+				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
+			},
+			"results": {
+				"bindings": [
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
+						"predicate_label": { "type": "literal" , "value": "label" },
+						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
+						"object_label": { "type": "literal" , "value": "Person" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
+						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
+					},
+					{
+						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
+						"predicate_label": { "type": "literal" , "value": "type" },
+						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
+					}
+				]
+			}
+		};
+		scope.$apply();
+		$httpBackend.flush(3);
+
+		var typedResourceViews = elm.find('dbpedia-typed-resource-view[configuration="config"]');
 		expect(typedResourceViews.length).toBe(2);
 	});
 });

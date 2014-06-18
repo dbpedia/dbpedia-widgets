@@ -10,7 +10,7 @@
 				'<p class="abstract">{{ abstract }}</p>' + 
 				'<ul>' +
 					'<li ng-repeat="config in knownTypes">' + 
-						'<dbpedia-typed-resource-view>' + 
+						'<dbpedia-typed-resource-view resource="resource" configuration="config">' + 
 						'</dbpedia-typed-resource-view>' + 
 					'</li>' +
 				'</ul>',
