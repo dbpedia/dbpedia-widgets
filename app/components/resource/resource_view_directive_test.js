@@ -3,47 +3,8 @@
 describe("resource_view_directive_test", function(){
 	var elm, scope, displayConfiguration;
 
-
-	var $httpBackend,
-		personTypeURI = 'http://xmlns.com/foaf/0.1/Person',
-		samplePersonConfiguration = {
-			"Person": [
-				{
-					label: "Occupation",
-					from: "http://dbpedia.org/ontology/occupation",
-				}
-			]
-		},
-		artistTypeURI = 'http://dbpedia.org/ontology/Artist',
-		sampleArtistConfiguration = {
-			"Musical Artist": [
-				{
-					label: "Genre",
-					from: ["http://dbpedia.org/ontology/genre", "http://dbpedia.org/property/genre"]
-				}
-			]
-		},
-		yagoRapperTypeURI = 'http://dbpedia.org/class/yago/Rapper110507482';
-
 	beforeEach(module('gulp-ng'));
-	
-	
 	beforeEach(inject(function($rootScope, $compile, _displayConfiguration_, _$httpBackend_) {
-		displayConfiguration = _displayConfiguration_;
-		$httpBackend = _$httpBackend_;
-
-		spyOn(displayConfiguration, 'forType').andCallThrough();
-
-		//train httpBackend w/ a couple responses
-		$httpBackend.when('GET', displayConfiguration.getConfigurationURL(personTypeURI))
-					.respond(samplePersonConfiguration);
-
-		$httpBackend.when('GET', displayConfiguration.getConfigurationURL(artistTypeURI))
-					.respond(sampleArtistConfiguration);
-
-		$httpBackend.when('GET', displayConfiguration.getConfigurationURL(yagoRapperTypeURI))
-					.respond(404, '');
-
 		elm = jQuery(
 			'<div>' +
 				'<dbpedia-resource-view resource="facts">' +
@@ -52,6 +13,153 @@ describe("resource_view_directive_test", function(){
 		);
 
 		scope = $rootScope.$new();
+		scope.facts = {
+			"uri": "http://dbpedia.org/resource/Sample",
+			"lang": "en",
+			"label": "A Sample Label",
+			"alt-label": "",
+			"depiction": "http://upload.wikimedia.org/wikipedia/commons/1/13/Tupac_Shakur_(rapper),_performing_live.jpg",
+			"type": "http://xmlns.com/foaf/0.1/Person",
+			"abstract": "A Sample Abstract",
+			"facts": [
+				{
+					"predicate": {
+						"type": "uri",
+						"value": "http://purl.org/dc/elements/1.1/description"
+					},
+					"predicate_label": {
+						"type": "literal",
+						"xml:lang": "en",
+						"value": "Description"
+					},
+					"objects": [
+						{
+							"type": "literal",
+							"xml:lang": "en",
+							"value": "American rap artist, actor and poet"
+						}
+					]
+				},
+				{
+					"type": "group",
+					"id": "bio",
+					"facts": [
+						{
+							"predicate": {
+								"type": "uri",
+								"value": "http://dbpedia.org/ontology/birthDate"
+							},
+							"predicate_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Birth date"
+							},
+							"objects": [
+								{
+									"type": "typed-literal",
+									"datatype": "http://www.w3.org/2001/XMLSchema#date",
+									"value": "1971-06-15+02:00"
+								}
+							]
+						},
+						{
+							"predicate": {
+								"type": "uri",
+								"value": "http://dbpedia.org/ontology/birthPlace"
+							},
+							"predicate_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Birth place"
+							},
+							"objects": [
+								{
+									"type": "uri",
+									"value": "http://dbpedia.org/resource/New_York_City",
+									"object_label": {
+										"type": "literal",
+										"xml:lang": "en",
+										"value": "New York City"
+									}
+								}
+							]
+						},
+						{
+							"predicate": {
+								"type": "uri",
+								"value": "http://dbpedia.org/ontology/deathDate"
+							},
+							"predicate_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Death date"
+							},
+							"objects": [
+								{
+									"type": "typed-literal",
+									"datatype": "http://www.w3.org/2001/XMLSchema#date",
+									"value": "1996-09-12+02:00"
+								}
+							]
+						},
+						{
+							"predicate": {
+								"type": "uri",
+								"value": "http://dbpedia.org/ontology/deathPlace"
+							},
+							"predicate_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Death place"
+							},
+							"objects": [
+								{
+									"type": "uri",
+									"value": "http://dbpedia.org/resource/Las_Vegas",
+									"object_label": {
+										"type": "literal",
+										"xml:lang": "en",
+										"value": "Las Vegas"
+									}
+								}
+							]
+						}
+					]
+				},
+				{
+					"predicate": {
+						"type": "uri",
+						"value": "http://dbpedia.org/ontology/occupation"
+					},
+					"predicate_label": {
+						"type": "literal",
+						"xml:lang": "en",
+						"value": "Occupation"
+					},
+					"objects": [
+						{
+							"type": "uri",
+							"value": "http://dbpedia.org/resource/Rapping",
+							"object_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Rapping"
+							}
+						},
+						{
+							"type": "uri",
+							"value": "http://dbpedia.org/resource/Actor",
+							"object_label": {
+								"type": "literal",
+								"xml:lang": "en",
+								"value": "Actor"
+							}
+						}
+					]
+				}
+			]
+		};
+
 		$compile(elm)(scope);
 		scope.$digest();
 	}));
@@ -84,266 +192,29 @@ describe("resource_view_directive_test", function(){
 	});
 
 	it('should display the label from the resource facts', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-
 		var heading = elm.find('label.heading');
 		expect(heading.length).toBe(1);
 		expect(heading.html()).toBe('A Sample Label');
 	});
 
 	it('should display the abstract from the resource facts', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://dbpedia.org/ontology/abstract" },
-						"predicate_label": { "type": "literal" , "value": "has abstract" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Abstract" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-
 		var heading = elm.find('p.abstract');
 		expect(heading.length).toBe(1);
 		expect(heading.html()).toBe('A Sample Abstract');
 	});
 
-	it('should request the display configuration for every rfd type from the resource facts', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
-						"object_label": { "type": "literal" , "value": "Person" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
-						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
-					}
-				]
-			}
-		};
-		scope.$apply();
 
-		//make sure it only requests for configurations of rdf types
-		//http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-		var expectedTypes = [
-				['http://xmlns.com/foaf/0.1/Person'],
-				['http://dbpedia.org/ontology/Artist'],
-				['http://dbpedia.org/class/yago/Rapper110507482']
-			];
-
-		expect(displayConfiguration.forType).toHaveBeenCalled();
-		expect(displayConfiguration.forType.callCount).toBe(expectedTypes.length);
-		expect(displayConfiguration.forType.argsForCall).toEqual(expectedTypes);
-	});
-
-
-	it('should maintain a list of display configurations for all the known types', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
-						"object_label": { "type": "literal" , "value": "Person" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
-						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-		$httpBackend.flush(3);
-
-		var expectedKnownTypes = [
-			samplePersonConfiguration,
-			sampleArtistConfiguration
-		];
-
-		var directiveIsolateScope = elm.children().isolateScope();
-		var knownTypes = directiveIsolateScope.knownTypes;
-		expect(knownTypes.length).toBe(expectedKnownTypes.length);
-		//use angular.equals so $ properties are ignored.
-		//the $ properties are added when the ng-repeat assigns a template 
-		//instance a new scope
-		expect(angular.equals(knownTypes, expectedKnownTypes)).toBe(true);
-	});
-
-
-	it('should display a dbpedia-typed-resource-view for each known type', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
-						"object_label": { "type": "literal" , "value": "Person" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
-						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-		$httpBackend.flush(3);
-
-		//make sure a list item is created for each dbpedia-typed-resource-view
+	it('should display each of the grouped facts', function() {
+		//make sure a list item is created for each dbpedia-grouped-fact
 		var listItems = elm.children('dbpedia-resource-view').children('ul').children('li');
-		expect(listItems.length).toBe(2);
+		expect(listItems.length).toBe(3, 'Incorrect amount of list items');
 
-		var typedResourceViews = elm.find('dbpedia-typed-resource-view');
-		expect(typedResourceViews.length).toBe(2);
+		var typedResourceViews = elm.find('dbpedia-grouped-facts');
+		expect(typedResourceViews.length).toBe(3, 'Incorrect amount of dbpedia-grouped-facts elements');
 	});
 
-	it('should pass the resource to dbpedia-typed-resource-view via the resource attribute', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
-						"object_label": { "type": "literal" , "value": "Person" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
-						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-		$httpBackend.flush(3);
-
-		var typedResourceViews = elm.find('dbpedia-typed-resource-view[resource="resource"]');
-		expect(typedResourceViews.length).toBe(2);
-	});
-
-
-	it('should pass the configuration to dbpedia-typed-resource-view via the configuration attribute', function() {
-		scope.facts = {
-			"head": {
-				"vars": [ "p" , "predicate_label" , "o" , "object_label" , "rank" ]
-			},
-			"results": {
-				"bindings": [
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/2000/01/rdf-schema#label" },
-						"predicate_label": { "type": "literal" , "value": "label" },
-						"o": { "type": "literal" , "xml:lang": "en" , "value": "A Sample Label" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://xmlns.com/foaf/0.1/Person" },
-						"object_label": { "type": "literal" , "value": "Person" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/ontology/Artist" },
-						"object_label": { "type": "literal" , "xml:lang": "en" , "value": "artist" }
-					},
-					{
-						"p": { "type": "uri" , "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" },
-						"predicate_label": { "type": "literal" , "value": "type" },
-						"o": { "type": "uri" , "value": "http://dbpedia.org/class/yago/Rapper110507482" }
-					}
-				]
-			}
-		};
-		scope.$apply();
-		$httpBackend.flush(3);
-
-		var typedResourceViews = elm.find('dbpedia-typed-resource-view[configuration="config"]');
-		expect(typedResourceViews.length).toBe(2);
+	it('should pass the grouped facts to dbpedia-resource-view via the fact attribute', function() {
+		var typedResourceViews = elm.find('dbpedia-grouped-facts[facts="groupedFacts"]');
+		expect(typedResourceViews.length).toBe(3, 'Grouped facts not passed via the fact attribute');
 	});
 });
