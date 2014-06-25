@@ -1,6 +1,6 @@
 'use strict';
 
-describe("typed_resource_view_directive_test", function(){
+xdescribe("typed_resource_view_directive_test", function(){
 	var elm, scope;
 
 	beforeEach(module('gulp-ng'));
