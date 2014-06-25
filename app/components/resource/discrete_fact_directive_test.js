@@ -106,6 +106,45 @@ describe("discrete_fact_directive_test", function(){
 		expect(li.length).toBe(2, 'incorrect amount of items');
 	});
 
+	describe('isURI', function () {
+		it('should be a function on the isolate scope', function () {
+			var isolateScope = elm.isolateScope();
+			expect(isolateScope.isURI).toBeDefined();
+			expect(typeof isolateScope.isURI).toBe('function');
+		});
+
+		it('should return true when a given object is a URI', function () {
+			var isolateScope = elm.isolateScope();
+			var obj = {
+				"type": "uri",
+				"value": "http://dbpedia.org/resource/Rapping"
+			};
+
+			expect(isolateScope.isURI(obj)).toBe(true);
+		});
+
+		it('should return false when a given object is not a URI', function () {
+			var isolateScope = elm.isolateScope();
+			
+
+			var obj = {
+				"type": "typed-literal",
+				"datatype": "http://www.w3.org/2001/XMLSchema#date",
+				"value": "1971-06-15+02:00"
+			};
+
+			expect(isolateScope.isURI(obj)).toBe(false, 'uri evaluated to true');
+
+
+			obj = {
+				"type": "literal",
+				"value": "sample value"
+			};
+
+			expect(isolateScope.isURI(obj)).toBe(false, 'literal evaluated to true');
+		});
+	});
+
 	it('should display fact objects of type uri as anchors linking to its resource', function () {
 		scope.fact = {
 			"predicate": {
@@ -137,13 +176,109 @@ describe("discrete_fact_directive_test", function(){
 		expect(anchor.html()).toBe('Rapping');
 	});
 
-	xit('should display the correct birth date fact as a date formatted literal', function() {
-		var li = elm.find('li[uri="http://dbpedia.org/ontology/birthDate"]');
-		var label = li.find('label.predicate');
-		var predicate = li.find('div.object');
+	it('should not display anchors for non-uri fact objects', function () {
+		scope.fact = {
+			"predicate": {
+				"type": "uri",
+				"value": "http://dbpedia.org/ontology/birthDate"
+			},
+			"predicate_label": {
+				"type": "literal",
+				"xml:lang": "en",
+				"value": "Birth date"
+			},
+			"objects": [
+				{
+					"type": "typed-literal",
+					"datatype": "http://www.w3.org/2001/XMLSchema#date",
+					"value": "1971-06-15+02:00"
+				}
+			]
+		};
+		scope.$apply();
+		var anchor = elm.find('div.object a');
+		expect(anchor.length).toBe(0);
+	});
 
-		expect(label.length).toBe(1);
-		expect(label.html()).toBe('Birth Date');
-		expect(predicate.text()).toBe('06/15/1971');
+	
+
+	describe('isDate', function () {
+		it('should be a function on the isolate scope', function () {
+			var isolateScope = elm.isolateScope();
+			expect(isolateScope.isDate).toBeDefined();
+			expect(typeof isolateScope.isDate).toBe('function');
+		});
+
+		it('should return true when a given object is a date', function () {
+			var isolateScope = elm.isolateScope();
+			var dateObject = {
+				"type": "typed-literal",
+				"datatype": "http://www.w3.org/2001/XMLSchema#date",
+				"value": "1971-06-15+02:00"
+			};
+
+			expect(isolateScope.isDate(dateObject)).toBe(true);
+		});
+
+		it('should return false when a given object is not a date', function () {
+			var isolateScope = elm.isolateScope();
+			var dateObject = {
+				"type": "uri",
+				"value": "http://dbpedia.org/resource/Rapping"
+			};
+
+			expect(isolateScope.isDate(dateObject)).toBe(false, 'uri evaluated to true');
+
+
+			dateObject = {
+				"type": "literal",
+				"value": "sample value"
+			};
+
+			expect(isolateScope.isDate(dateObject)).toBe(false, 'literal evaluated to true');
+		});
+	});
+
+	describe('parseDate', function () {
+		it('should be a function on the isolate scope', function () {
+			var isolateScope = elm.isolateScope();
+			expect(isolateScope.isDate).toBeDefined();
+			expect(typeof isolateScope.isDate).toBe('function');
+		});
+
+		it('should return the correct date as a string', function () {
+			var isolateScope = elm.isolateScope();
+			var dateObject = {
+				"type": "typed-literal",
+				"datatype": "http://www.w3.org/2001/XMLSchema#date",
+				"value": "1971-06-15+02:00"
+			};
+
+			expect(isolateScope.parseDate(dateObject)).toBe('06/15/1971');
+		});
+	});
+
+	it('should display fact objects of type typed-literal, datatype date, as a formatted date string', function() {
+		scope.fact = {
+			"predicate": {
+				"type": "uri",
+				"value": "http://dbpedia.org/ontology/birthDate"
+			},
+			"predicate_label": {
+				"type": "literal",
+				"xml:lang": "en",
+				"value": "Birth date"
+			},
+			"objects": [
+				{
+					"type": "typed-literal",
+					"datatype": "http://www.w3.org/2001/XMLSchema#date",
+					"value": "1971-06-15+02:00"
+				}
+			]
+		};
+		scope.$apply();
+		var span = elm.find('div.object span');
+		expect(span.text()).toBe('06/15/1971');
 	});
 });
