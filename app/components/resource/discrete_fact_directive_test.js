@@ -1,15 +1,13 @@
 'use strict';
 
 describe("discrete_fact_directive_test", function(){
-	var elm, scope, displayConfiguration;
+	var elm, scope;
 
 	beforeEach(module('gulp-ng'));
-	beforeEach(inject(function($rootScope, $compile, _displayConfiguration_, _$httpBackend_) {
+	beforeEach(inject(function($rootScope, $compile, _$httpBackend_) {
 		elm = jQuery(
-			//'<div>' +
-				'<dbpedia-discrete-fact fact="fact">' +
-				'</dbpedia-discrete-fact>'
-			//'</div>'
+			'<dbpedia-discrete-fact fact="fact">' +
+			'</dbpedia-discrete-fact>'
 		);
 
 		scope = $rootScope.$new();

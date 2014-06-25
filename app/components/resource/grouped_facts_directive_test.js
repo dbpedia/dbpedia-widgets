@@ -1,10 +1,10 @@
 'use strict';
 
 describe("grouped_facts_directive_test", function(){
-	var elm, scope, displayConfiguration;
+	var elm, scope;
 
 	beforeEach(module('gulp-ng'));
-	beforeEach(inject(function($rootScope, $compile, _displayConfiguration_, _$httpBackend_) {
+	beforeEach(inject(function($rootScope, $compile, _$httpBackend_) {
 		elm = jQuery(
 			'<div>' +
 				'<dbpedia-grouped-facts facts="groupedFacts">' +
