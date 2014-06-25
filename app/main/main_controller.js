@@ -10,7 +10,7 @@
           controller: 'MainCtrl'
         });
     })
-    .controller('MainCtrl', function ($scope) {
+    .controller('MainCtrl', function () {
     });
 
 })();
