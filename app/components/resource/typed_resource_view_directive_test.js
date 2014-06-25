@@ -198,16 +198,14 @@ describe("typed_resource_view_directive_test", function(){
 	});
 
 
-	xit('should display the correct birth date fact as a date formatted literal', function() {
+	it('should display the correct birth date fact as a date formatted literal', function() {
 		var li = elm.find('li[uri="http://dbpedia.org/ontology/birthDate"]');
 		var label = li.find('label.predicate');
 		var predicate = li.find('div.object');
 
 		expect(label.length).toBe(1);
-		expect(label.html()).toBe('birth date');
-		expect(anchors.length).toBe(2);
-
-		expect(predicate.html()).toBe('06/15/1971');
+		expect(label.html()).toBe('Birth Date');
+		expect(predicate.text()).toBe('06/15/1971');
 	});
 
 	xit('should display a dbpedia-typed-resource-view for each known type', function() {
