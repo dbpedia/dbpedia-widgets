@@ -1,7 +1,7 @@
 (function(){
 	'use strict';
 
-	function dbpediaResourceView(displayConfiguration) {
+	function dbpediaResourceView() {
 		return {
 			restrict: 'E',
 			template: 
@@ -18,8 +18,8 @@
 			scope: {
 				resource: '='		//two-way parent scope binding
 			},
-			link: function (scope, element) {
-				scope.$watch('resource', function (newVal, oldVal) {
+			link: function (scope) {
+				scope.$watch('resource', function (newVal) {
 					if (newVal) {
 						scope.heading = scope.resource.label;
 						scope.abstract = scope.resource.abstract;
