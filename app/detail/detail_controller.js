@@ -23,6 +23,28 @@
 				'abstract': 'A Sample Abstract',
 				'facts': [
 					{
+						'facts': [
+							{
+								'predicate': {
+									'type': 'uri',
+									'value': 'http://purl.org/dc/elements/1.1/description'
+								},
+								'predicate_label': {
+									'type': 'literal',
+									'xml:lang': 'en',
+									'value': 'Description'
+								},
+								'objects': [
+									{
+										'type': 'literal',
+										'xml:lang': 'en',
+										'value': 'American rap artist, actor and poet'
+									}
+								]
+							}
+						]
+					},
+					{
 						'id': 'bio',
 						'facts': [
 							{

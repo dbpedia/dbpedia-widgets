@@ -281,4 +281,66 @@ describe("discrete_fact_directive_test", function(){
 		var span = elm.find('div.object span');
 		expect(span.text()).toBe('06/15/1971');
 	});
+
+	describe('isLiteral', function () {
+		it('should be a function on the isolate scope', function () {
+			var isolateScope = elm.isolateScope();
+			expect(isolateScope.isLiteral).toBeDefined();
+			expect(typeof isolateScope.isLiteral).toBe('function');
+		});
+
+		it('should return true when a given object is a literal', function () {
+			var isolateScope = elm.isolateScope();
+			var obj = {
+				"type": "literal",
+				"xml:lang": "en",
+				"value": "American rap artist, actor and poet"
+			};
+
+			expect(isolateScope.isLiteral(obj)).toBe(true);
+		});
+
+		it('should return false when a given object is not a literal', function () {
+			var isolateScope = elm.isolateScope();
+
+			var obj = {
+				"type": "typed-literal",
+				"datatype": "http://www.w3.org/2001/XMLSchema#date",
+				"value": "1971-06-15+02:00"
+			};
+			expect(isolateScope.isLiteral(obj)).toBe(false, 'date evaluated to true');
+
+			obj = {
+				"type": "uri",
+				"value": "http://dbpedia.org/resource/Rapping"
+			};
+			expect(isolateScope.isLiteral(obj)).toBe(false, 'uri evaluated to true');
+		});
+	});
+
+
+	it('should display fact objects of type literal as is', function() {
+		scope.fact = {
+			"predicate": {
+				"type": "uri",
+				"value": "http://purl.org/dc/elements/1.1/description"
+			},
+			"predicate_label": {
+				"type": "literal",
+				"xml:lang": "en",
+				"value": "Description"
+			},
+			"objects": [
+				{
+					"type": "literal",
+					"xml:lang": "en",
+					"value": "American rap artist, actor and poet"
+				}
+			]
+		};
+
+		scope.$apply();
+		var span = elm.find('div.object span');
+		expect(span.text()).toBe('American rap artist, actor and poet');
+	});
 });
