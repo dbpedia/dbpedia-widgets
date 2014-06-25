@@ -6,8 +6,8 @@
 			restrict: 'E',
 			template: 
 			//'<div class="wrapper" ng-if="results">' +
-				'<label class="heading">{{ heading }}</label>'+
-				'<p class="abstract">{{ abstract }}</p>' + 
+				'<label class="heading">{{ resource.label }}</label>'+
+				'<p class="abstract">{{ resource.abstract }}</p>' + 
 				'<ul>' +
 					'<li ng-repeat="groupedFacts in resource.facts">' + 
 						'<dbpedia-grouped-facts facts="groupedFacts">' +
@@ -17,14 +17,6 @@
 			//'</div>',
 			scope: {
 				resource: '='		//two-way parent scope binding
-			},
-			link: function (scope) {
-				scope.$watch('resource', function (newVal) {
-					if (newVal) {
-						scope.heading = scope.resource.label;
-						scope.abstract = scope.resource.abstract;
-					}
-				});
 			}
 		};
 	}
