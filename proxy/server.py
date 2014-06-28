@@ -12,6 +12,9 @@ class ResourceHandler(tornado.web.RequestHandler):
 
 def main():
     application = tornado.web.Application([
+            #a single request argument, the resource URI, will be passed in the URL
+            #regex will match any amount of non-whitespace characters
+            #sample - /resource/http://dbpedia.org/resource/Sample
             (r'/resource/(\S*)', ResourceHandler)
         ])
     application.listen(8000)
