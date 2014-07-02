@@ -68,14 +68,16 @@ class DBpediaEndpointTest(AsyncTestCase):
     def test_should_request_the_subject_facts_from_the_dbpedia_endpoint(self, fetch):
         resourceURI = 'http://dbpedia.org/resource/Sample'
         self.dbpedia_endpoint.fetch(resourceURI)
-        fetch.assert_called_once_with(self.dbpedia_endpoint.facts_url(resourceURI))
+        fetch.assert_any_with(self.dbpedia_endpoint.facts_url(resourceURI))
 
 
     @patch.object(AsyncHTTPClient, 'fetch')
     def test_should_request_the_inverse_subject_facts_from_the_dbpedia_endpoint(self, fetch):
         resourceURI = 'http://dbpedia.org/resource/Sample'
         self.dbpedia_endpoint.fetch(resourceURI)
-        fetch.assert_called_once_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
+        fetch.assert_any_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
+
+
 
 
     # def test_should_return_both_sets_of_facts(self):

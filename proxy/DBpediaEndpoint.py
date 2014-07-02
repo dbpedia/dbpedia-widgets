@@ -10,8 +10,11 @@ class DBpediaEndpoint(object):
         print("fetch")
         endpointURL = 'http://dbpedia.org/sparql'
         http_client = AsyncHTTPClient()
-        triples = yield http_client.fetch(self.facts_url(uri))
-        print(triples.body)
+        facts, inverse_facts = yield [
+            http_client.fetch(self.facts_url(uri)), 
+            http_client.fetch(self.inverse_facts_url(uri))
+        ]
+        print(facts.body)
 
     def facts_url(self, uri):
         endpointURL = 'http://dbpedia.org/sparql'
