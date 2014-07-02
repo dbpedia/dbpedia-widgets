@@ -16,31 +16,6 @@ class DBpediaEndpointTest(AsyncTestCase):
         AsyncTestCase.setUp(self)
         self.dbpedia_endpoint = DBpediaEndpoint()
 
-    # @patch.object(AsyncHTTPClient, 'fetch')
-    # def test_should_execute_two_sparql_queries_against_the_dbpedia_endpoint(self, fetch):
-    #   resourceURI = 'http://dbpedia.org/resource/Sample'
-    #   endpointURL = 'http://dbpedia.org/sparql'
-    #   self.dbpedia_endpoint.fetch(resourceURI)
-    #   fetch.assert_called_once_with(resourceURI)
-
-    @patch.object(AsyncHTTPClient, 'fetch')
-    def test_should_request_the_subject_facts_from_the_dbpedia_endpoint(self, fetch):
-        resourceURI = 'http://dbpedia.org/resource/Sample'
-        self.dbpedia_endpoint.fetch(resourceURI)
-        fetch.assert_called_once_with(self.dbpedia_endpoint.facts_url(resourceURI))
-
-    @patch.object(AsyncHTTPClient, 'fetch')
-    def test_should_request_the_inverse_subject_facts_from_the_dbpedia_endpoint(self, fetch):
-        resourceURI = 'http://dbpedia.org/resource/Sample'
-        self.dbpedia_endpoint.fetch(resourceURI)
-        fetch.assert_called_once_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
-
-    # @patch.object(AsyncHTTPClient, 'fetch')
-    def test_should_execute_two_sparql_queries_against_the_dbpedia_endpoint(self):
-        resourceURI = 'http://dbpedia.org/resource/Sample'
-        # endpointURL = 'http://dbpedia.org/sparql'
-        self.dbpedia_endpoint.fetch(resourceURI)
-        # fetch.assert_called_once_with(resourceURI)
 
     def test_facts_query_returns_correct_url_with_sparql_query(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
@@ -65,6 +40,7 @@ class DBpediaEndpointTest(AsyncTestCase):
         actualURI = self.dbpedia_endpoint.facts_url(resourceURI)
         self.assertEqual(actualURI, expectedURI)
 
+
     def test_inverse_facts_query_returns_correct_url_with_sparql_query(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
         endpointURL = 'http://dbpedia.org/sparql'
@@ -86,6 +62,21 @@ class DBpediaEndpointTest(AsyncTestCase):
         expectedURI = url_concat(endpointURL, dict(query=sparql))
         actualURI = self.dbpedia_endpoint.inverse_facts_url(resourceURI)
         self.assertEqual(actualURI, expectedURI)
+
+
+    @patch.object(AsyncHTTPClient, 'fetch')
+    def test_should_request_the_subject_facts_from_the_dbpedia_endpoint(self, fetch):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        self.dbpedia_endpoint.fetch(resourceURI)
+        fetch.assert_called_once_with(self.dbpedia_endpoint.facts_url(resourceURI))
+
+
+    @patch.object(AsyncHTTPClient, 'fetch')
+    def test_should_request_the_inverse_subject_facts_from_the_dbpedia_endpoint(self, fetch):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        self.dbpedia_endpoint.fetch(resourceURI)
+        fetch.assert_called_once_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
+
 
     # def test_should_return_both_sets_of_facts(self):
     #   pass
