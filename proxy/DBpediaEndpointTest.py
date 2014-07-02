@@ -28,7 +28,7 @@ class DBpediaEndpointTest(AsyncTestCase):
         resourceURI = 'http://dbpedia.org/resource/Sample'
         endpointURL = 'http://dbpedia.org/sparql'
         self.dbpedia_endpoint.fetch(resourceURI)
-        fetch.assert_called_once_with(endpointURL)
+        fetch.assert_called_once_with(self.dbpedia_endpoint.facts_url(resourceURI))
 
     # @patch.object(AsyncHTTPClient, 'fetch')
     def test_should_execute_two_sparql_queries_against_the_dbpedia_endpoint(self):
