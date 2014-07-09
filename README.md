@@ -1,5 +1,4 @@
 ## dbpedia_widgets ##
-===============
 
 Simple embeddable widgets
 
@@ -13,7 +12,7 @@ Simple embeddable widgets
 
 
 ## Setting Up ##
-===
+
     #install gulp, bower globally
     npm install -g gulp bower
 
@@ -42,14 +41,13 @@ Simple embeddable widgets
 
 
 ## Running Front-end ##
-===
 
     #start the default task - builds and launches a server on port 9000
     gulp
 
 
 ## Running Proxy ##
-===
+
     #activate the virtualenv environment
     source env/bin/activate
     
