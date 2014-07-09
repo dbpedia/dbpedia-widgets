@@ -85,8 +85,7 @@ class DBpediaEndpointTest(AsyncTestCase):
 
 
     @gen_test
-    @patch.object(AsyncHTTPClient, 'fetch')
-    def test_should_return_both_sets_of_facts(self, fetch):
+    def test_should_return_both_sets_of_facts(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
 
         
