@@ -7,29 +7,35 @@ from tornado.testing import AsyncHTTPTestCase
 from tornado.testing import AsyncTestCase
 import tornado.web
 from server import ResourceHandler
-from server import DBpediaEndpoint
+# from server import DBpediaEndpoint
+
+from FactService import FactService
+from tornado.concurrent import Future
+from tornado.testing import gen_test
 
 class ResourceHandlerTest(AsyncHTTPTestCase):
     """docstring for ProxyServerTest"""
 
     def get_app(self):
-        self._dbpedia_endpoint = DBpediaEndpoint()
-        #return ProxyServer()
+        self._fact_service = FactService()
         return tornado.web.Application([
-                (r'/resource/(\S*)', ResourceHandler, dict(dbpedia_endpoint = self._dbpedia_endpoint))
+                (r'/resource/(\S*)', ResourceHandler, dict(fact_service = self._fact_service))
             ])
 
-    def test_should_respond_with_the_resource_uri(self):
-        response = self.fetch('/resource/http://dbpedia.org/resource/Sample')
-        self.assertIn(b'"uri": "http://dbpedia.org/resource/Sample"', response.body)
+    # def test_should_respond_with_the_resource_uri(self):
+    #     response = self.fetch('/resource/http://dbpedia.org/resource/Sample')
+    #     self.assertIn(b'"uri": "http://dbpedia.org/resource/Sample"', response.body)
 
-    def test_should_call_dbpedia_endpoint_to_fetch_facts_for_the_given_uri(self):
+    @gen_test
+    def test_should_call_fact_service_to_get_resource_facts_for_the_given_uri(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
-        
-        self._dbpedia_endpoint.fetch = MagicMock()
+        future = Future()
+        future.set_result(None)
+
+        self._fact_service.get_resource = Mock(return_value=future)
         self.fetch('/resource/' + resourceURI)
 
-        self._dbpedia_endpoint.fetch.assert_called_once_with(resourceURI)
+        self._fact_service.get_resource.assert_called_once_with(resourceURI)
         
 
 if __name__ == '__main__':

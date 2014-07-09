@@ -1,6 +1,8 @@
 import tornado.ioloop
 import tornado.web
-from DBpediaEndpoint import DBpediaEndpoint
+from FactService import FactService
+from tornado.gen import coroutine
+import json
 
 class ResourceHandler(tornado.web.RequestHandler):
     """
@@ -8,12 +10,14 @@ class ResourceHandler(tornado.web.RequestHandler):
         It requests all the facts for a given resource
         and generates a formatted JSON response
     """
-    def initialize(self, dbpedia_endpoint = DBpediaEndpoint()):
-        self.dbpedia_endpoint = dbpedia_endpoint
+    def initialize(self, fact_service = FactService()):
+        self.fact_service = fact_service
 
+    @coroutine
     def get(self, uri):
-        raw = self.dbpedia_endpoint.fetch(uri)
-        self.write({ "uri": uri })
+        #raw = yield self.dbpedia_endpoint.fetch(uri)
+        result = yield self.fact_service.get_resource(uri)
+        self.write(json.dumps(result))
 
 
 def main():
