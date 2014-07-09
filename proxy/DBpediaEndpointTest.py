@@ -156,27 +156,20 @@ class DBpediaEndpointTest(AsyncTestCase):
         with patch.object(AsyncHTTPClient, 'fetch', side_effect=retVals):
             results = yield self.dbpedia_endpoint.fetch(resourceURI)
 
-            expectedResults = {
-                "head": {
-                    "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
+            expectedResults = [
+                {
+                    "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/hometown" },
+                    "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "home town" },
+                    "o": { "type": "uri" , "value": "http://dbpedia.org/resource/California" },
+                    "object_label": { "type": "literal" , "xml:lang": "en" , "value": "California" }
                 },
-                "results": {
-                    "bindings": [
-                        {
-                            "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/hometown" },
-                            "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "home town" },
-                            "o": { "type": "uri" , "value": "http://dbpedia.org/resource/California" },
-                            "object_label": { "type": "literal" , "xml:lang": "en" , "value": "California" }
-                        },
-                        {
-                            "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/deathPlace" } ,
-                            "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "death place" } ,
-                            "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Las_Vegas" } ,
-                            "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Las Vegas" }
-                        }
-                    ]
+                {
+                    "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/deathPlace" } ,
+                    "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "death place" } ,
+                    "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Las_Vegas" } ,
+                    "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Las Vegas" }
                 }
-            }
+            ]
             self.assertEqual(results, expectedResults)
         
 

@@ -17,9 +17,12 @@ class DBpediaEndpoint(object):
             http_client.fetch(self.facts_url(uri), headers = headers), 
             http_client.fetch(self.inverse_facts_url(uri), headers = headers)
         ]
-        response = json.loads(facts_response.body.decode())
-        response['results']['bindings'].extend(json.loads(inverse_facts_response.body.decode())['results']['bindings'])
-        return response
+        facts = self.parse_response(facts_response)
+        inverse_facts = self.parse_response(inverse_facts_response)
+        return facts + inverse_facts
+
+    def parse_response(self, response):
+        return json.loads(response.body.decode())['results']['bindings']
 
 
     def facts_url(self, uri):
