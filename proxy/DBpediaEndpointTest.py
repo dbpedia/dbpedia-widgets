@@ -2,8 +2,9 @@ import unittest
 from unittest.mock import Mock
 from unittest.mock import MagicMock
 from unittest.mock import patch
+from unittest.mock import call
 
-from io import StringIO
+from io import BytesIO
 
 from tornado.testing import AsyncTestCase
 from tornado.httpclient import *
@@ -83,13 +84,24 @@ class DBpediaEndpointTest(AsyncTestCase):
         self.dbpedia_endpoint.fetch(resourceURI)
         fetch.assert_any_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
 
+    @patch.object(AsyncHTTPClient, 'fetch')
+    def test_should_request_the_subject_facts_as_json(self, fetch):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        self.dbpedia_endpoint.fetch(resourceURI)
+        headers = dict(accept = 'application/json')
+        calls = [
+            call(self.dbpedia_endpoint.facts_url(resourceURI), headers = headers),
+            call(self.dbpedia_endpoint.inverse_facts_url(resourceURI), headers = headers)
+        ]
+        fetch.assert_has_calls(calls)
 
     @gen_test
     def test_should_return_both_sets_of_facts(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
 
         
-        facts = {
+        facts = b'''
+        {
             "head": {
                 "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
             },
@@ -104,16 +116,18 @@ class DBpediaEndpointTest(AsyncTestCase):
                 ]
             }
         }
+        '''
 
         facts_request = HTTPRequest(self.dbpedia_endpoint.facts_url(resourceURI))
-        facts_buffer = StringIO(json.dumps(facts))
+        facts_buffer = BytesIO(facts)
         facts_response = HTTPResponse(facts_request, 200, buffer = facts_buffer)
         facts_future = Future()
         facts_future.set_result(facts_response)
 
 
 
-        inverse_facts = {
+        inverse_facts = b'''
+        {
             "head": {
                 "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
             },
@@ -128,9 +142,10 @@ class DBpediaEndpointTest(AsyncTestCase):
                 ]
             }
         }
+        '''
 
         inverse_facts_request = HTTPRequest(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
-        inverse_facts_buffer = StringIO(json.dumps(inverse_facts))
+        inverse_facts_buffer = BytesIO(inverse_facts)
         inverse_facts_response = HTTPResponse(inverse_facts_request, 200, buffer = inverse_facts_buffer)
         inverse_facts_future = Future()
         inverse_facts_future.set_result(inverse_facts_response)

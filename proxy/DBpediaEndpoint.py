@@ -12,13 +12,13 @@ class DBpediaEndpoint(object):
     def fetch(self, uri):
         endpointURL = 'http://dbpedia.org/sparql'
         http_client = AsyncHTTPClient()
+        headers = dict(accept = 'application/json')
         facts_response, inverse_facts_response = yield [
-            http_client.fetch(self.facts_url(uri)), 
-            http_client.fetch(self.inverse_facts_url(uri))
+            http_client.fetch(self.facts_url(uri), headers = headers), 
+            http_client.fetch(self.inverse_facts_url(uri), headers = headers)
         ]
-
-        response = json.loads(facts_response.body)
-        response['results']['bindings'].extend(json.loads(inverse_facts_response.body)['results']['bindings'])
+        response = json.loads(facts_response.body.decode())
+        response['results']['bindings'].extend(json.loads(inverse_facts_response.body.decode())['results']['bindings'])
         return response
 
 
