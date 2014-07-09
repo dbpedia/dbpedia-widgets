@@ -3,11 +3,17 @@ from unittest.mock import Mock
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
+from io import StringIO
+
 from tornado.testing import AsyncTestCase
-from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import *
 from tornado.httputil import url_concat
+from tornado.testing import gen_test
+from tornado.concurrent import Future
+
 import string
 from DBpediaEndpoint import DBpediaEndpoint
+import json
 
 
 class DBpediaEndpointTest(AsyncTestCase):
@@ -78,10 +84,86 @@ class DBpediaEndpointTest(AsyncTestCase):
         fetch.assert_any_with(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
 
 
+    @gen_test
+    @patch.object(AsyncHTTPClient, 'fetch')
+    def test_should_return_both_sets_of_facts(self, fetch):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+
+        
+        facts = {
+            "head": {
+                "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/hometown" },
+                        "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "home town" },
+                        "o": { "type": "uri" , "value": "http://dbpedia.org/resource/California" },
+                        "object_label": { "type": "literal" , "xml:lang": "en" , "value": "California" }
+                    }
+                ]
+            }
+        }
+
+        facts_request = HTTPRequest(self.dbpedia_endpoint.facts_url(resourceURI))
+        facts_buffer = StringIO(json.dumps(facts))
+        facts_response = HTTPResponse(facts_request, 200, buffer = facts_buffer)
+        facts_future = Future()
+        facts_future.set_result(facts_response)
 
 
-    # def test_should_return_both_sets_of_facts(self):
-    #   pass
+
+        inverse_facts = {
+            "head": {
+                "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/deathPlace" } ,
+                        "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "death place" } ,
+                        "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Las_Vegas" } ,
+                        "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Las Vegas" }
+                    }
+                ]
+            }
+        }
+
+        inverse_facts_request = HTTPRequest(self.dbpedia_endpoint.inverse_facts_url(resourceURI))
+        inverse_facts_buffer = StringIO(json.dumps(inverse_facts))
+        inverse_facts_response = HTTPResponse(inverse_facts_request, 200, buffer = inverse_facts_buffer)
+        inverse_facts_future = Future()
+        inverse_facts_future.set_result(inverse_facts_response)
+
+        retVals = [ facts_future, inverse_facts_future ]
+
+
+        with patch.object(AsyncHTTPClient, 'fetch', side_effect=retVals):
+            results = yield self.dbpedia_endpoint.fetch(resourceURI)
+
+            expectedResults = {
+                "head": {
+                    "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
+                },
+                "results": {
+                    "bindings": [
+                        {
+                            "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/hometown" },
+                            "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "home town" },
+                            "o": { "type": "uri" , "value": "http://dbpedia.org/resource/California" },
+                            "object_label": { "type": "literal" , "xml:lang": "en" , "value": "California" }
+                        },
+                        {
+                            "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/deathPlace" } ,
+                            "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "death place" } ,
+                            "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Las_Vegas" } ,
+                            "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Las Vegas" }
+                        }
+                    ]
+                }
+            }
+            self.assertEqual(results, expectedResults)
         
 
 if __name__ == '__main__':

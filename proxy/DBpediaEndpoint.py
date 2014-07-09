@@ -3,18 +3,24 @@ from tornado.gen import coroutine
 
 import string
 from tornado.httputil import url_concat
+
+import json
+
 class DBpediaEndpoint(object):
     """docstring for DBpediaEndpoint"""
     @coroutine
     def fetch(self, uri):
-        print("fetch")
         endpointURL = 'http://dbpedia.org/sparql'
         http_client = AsyncHTTPClient()
-        facts, inverse_facts = yield [
+        facts_response, inverse_facts_response = yield [
             http_client.fetch(self.facts_url(uri)), 
             http_client.fetch(self.inverse_facts_url(uri))
         ]
-        print(facts.body)
+
+        response = json.loads(facts_response.body)
+        response['results']['bindings'].extend(json.loads(inverse_facts_response.body)['results']['bindings'])
+        return response
+
 
     def facts_url(self, uri):
         endpointURL = 'http://dbpedia.org/sparql'
