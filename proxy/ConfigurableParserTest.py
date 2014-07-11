@@ -1,13 +1,7 @@
 import unittest
 from unittest.mock import *
 
-from io import BytesIO
-
 from tornado.testing import AsyncTestCase
-from tornado.httpclient import *
-from tornado.httputil import url_concat
-from tornado.testing import gen_test
-from tornado.concurrent import Future
 
 import string
 from ConfigurableParser import ConfigurableParser
