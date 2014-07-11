@@ -157,7 +157,8 @@ class ConfigurableParserTest(AsyncTestCase):
         raw_configuration = '''{ "Sample": [] }'''
         m = mock_open(read_data=raw_configuration)
 
-        #https://code.google.com/p/mock/issues/detail?id=204#c4
+        #we need to pactch open on the global namespace
+        #builtins == __builtin__ (python 2)
         with patch("builtins.open", m, create=True):
             parser.process_type(rdfType)
 
@@ -199,7 +200,61 @@ class ConfigurableParserTest(AsyncTestCase):
 
         parser.generate_results.assert_called_once_with(json.loads(raw_configuration))
 
+    def test_generate_results_outputs_correct_id_based_on_the_configuration(self):
+        facts = []
+        parser = ConfigurableParser(facts)
+        output = parser.generate_results({ "Sample": [] })
+        self.assertEqual(output['id'], 'Sample')
 
+    def test_generate_results_outputs_correct_facts_for_single_predicate_spec(self):
+        facts = [
+            {
+                "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/birthDate" } ,
+                "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "birth date" } ,
+                "o": { "datatype": "http://www.w3.org/2001/XMLSchema#date" , "type": "typed-literal" , "value": "1971-06-15+02:00" }
+            }
+        ]
+        configuration = {
+            "Sample": [
+                {
+                    "label": "Birth Place",
+                    "from": "http://dbpedia.org/ontology/birthPlace"
+                },
+                {
+                    "label": "Birth Date",
+                    "from": "http://dbpedia.org/ontology/birthDate"
+                }
+            ]
+        }
+        
+        parser = ConfigurableParser(facts)
+        output = parser.generate_results(configuration)
+        
+        expectedOutput = {
+            "id": "Sample",
+            "facts": [
+                {
+                    'predicate': {
+                        'type': 'uri',
+                        'value': 'http://dbpedia.org/ontology/birthDate'
+                    },
+                    'predicate_label': {
+                        'type': 'literal',
+                        'xml:lang': 'en',
+                        'value': 'Birth date'
+                    },
+                    'objects': [{
+                        'type': 'typed-literal',
+                        'datatype': 'http://www.w3.org/2001/XMLSchema#date',
+                        'value': '1971-06-15+02:00'
+                    }]
+                }
+            ]
+        }
+        self.assertEqual(output['facts'], expectedOutput['facts'])
+
+    def test_generate_results_outputs_correct_facts_for_list_of_predicates_spec(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

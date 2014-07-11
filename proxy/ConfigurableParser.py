@@ -1,4 +1,5 @@
 import json
+
 class ConfigurableParser(object):
     """docstring for ConfigurableParser"""
     def __init__(self, facts):
@@ -17,4 +18,32 @@ class ConfigurableParser(object):
         return result
 
     def generate_results(self, configuration):
-        return None
+        # print(configuration.keys())
+        label = list(configuration.keys())[0]
+        output = {
+            "id": label,
+            "facts": []
+        }
+
+        specs = list(configuration.values())[0]
+
+        for spec in specs:
+            specLabel = spec['label']
+            specBinding = spec['from']
+
+            matching_facts = [fact for fact in self.facts if fact['p']['value'] == specBinding]
+
+            spec_result = {
+                'predicate': {},
+                'predicate_label': {},
+                'objects': []
+            }
+
+            output['facts'].append(spec_result)
+
+            print(matching_facts)
+
+            # print(output['facts'])
+
+
+        return output
