@@ -216,10 +216,10 @@ class ConfigurableParserTest(AsyncTestCase):
         ]
         configuration = {
             "Sample": [
-                {
-                    "label": "Birth Place",
-                    "from": "http://dbpedia.org/ontology/birthPlace"
-                },
+                # {
+                #     "label": "Birth Place",
+                #     "from": "http://dbpedia.org/ontology/birthPlace"
+                # },
                 {
                     "label": "Birth Date",
                     "from": "http://dbpedia.org/ontology/birthDate"
@@ -229,19 +229,16 @@ class ConfigurableParserTest(AsyncTestCase):
         
         parser = ConfigurableParser(facts)
         output = parser.generate_results(configuration)
-        
+            
+        print('output', output)
+
         expectedOutput = {
             "id": "Sample",
             "facts": [
                 {
                     'predicate': {
-                        'type': 'uri',
-                        'value': 'http://dbpedia.org/ontology/birthDate'
-                    },
-                    'predicate_label': {
-                        'type': 'literal',
-                        'xml:lang': 'en',
-                        'value': 'Birth date'
+                        'value': ['http://dbpedia.org/ontology/birthDate'],
+                        'label': 'Birth Date'
                     },
                     'objects': [{
                         'type': 'typed-literal',

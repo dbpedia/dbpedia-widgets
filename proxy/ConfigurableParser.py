@@ -33,15 +33,25 @@ class ConfigurableParser(object):
 
             matching_facts = [fact for fact in self.facts if fact['p']['value'] == specBinding]
 
+            print('matching_facts', set([fact['p']['value'] for fact in matching_facts]))
+
+            objects = []
+
+            for fact in matching_facts:
+                obj = fact['o']
+                objects.append(obj)
+
             spec_result = {
-                'predicate': {},
-                'predicate_label': {},
-                'objects': []
+                'predicate': {
+                    'value': [fact['p']['value'] for fact in matching_facts],
+                    'label': specLabel
+                }
+                'objects': objects
             }
 
             output['facts'].append(spec_result)
 
-            print(matching_facts)
+            # print('spec_result', spec_result)
 
             # print(output['facts'])
 
