@@ -18,7 +18,6 @@ class ConfigurableParser(object):
         return result
 
     def generate_results(self, configuration):
-        # print(configuration.keys())
         label = list(configuration.keys())[0]
         output = {
             "id": label,
@@ -31,29 +30,25 @@ class ConfigurableParser(object):
             specLabel = spec['label']
             specBinding = spec['from']
 
-            matching_facts = [fact for fact in self.facts if fact['p']['value'] == specBinding]
-
-            print('matching_facts', set([fact['p']['value'] for fact in matching_facts]))
+            matching_facts = [fact for fact in self.facts if fact['p']['value'] == specBinding or fact['p']['value'] in specBinding]
 
             objects = []
-
             for fact in matching_facts:
                 obj = fact['o']
+
+                if 'object_label' in fact:
+                    obj['label'] = fact['object_label']['value']
+
                 objects.append(obj)
 
             spec_result = {
                 'predicate': {
-                    'value': [fact['p']['value'] for fact in matching_facts],
+                    'value': specBinding,
                     'label': specLabel
-                }
+                },
                 'objects': objects
             }
 
             output['facts'].append(spec_result)
-
-            # print('spec_result', spec_result)
-
-            # print(output['facts'])
-
 
         return output
