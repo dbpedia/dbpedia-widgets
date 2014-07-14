@@ -7,7 +7,8 @@ class ConfigurableParser(object):
         
     def parse(self):
         type_nodes = [node["o"]["value"] for node in self.facts if node["p"]["value"] == "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"]
-        return [self.process_type(rdf_type) for rdf_type in type_nodes]
+        results = [self.process_type(rdf_type) for rdf_type in type_nodes]
+        return [r for r in results if r] #remove any empty dicts
 
     def process_type(self, rdf_type):
         config_location = rdf_type.replace('http://', 'configurations/') + ".json"

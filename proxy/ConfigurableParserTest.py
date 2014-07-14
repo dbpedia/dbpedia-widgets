@@ -130,6 +130,110 @@ class ConfigurableParserTest(AsyncTestCase):
         ]
         parser.process_type.assert_has_calls(calls)
 
+    def test_parse_removes_any_empty_dicts_from_the_output_list(self):
+        facts = [
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "type"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/2002/07/owl#Thing"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "value": "Thing"
+                }
+            },
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "type"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://xmlns.com/foaf/0.1/Person"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "value": "Person"
+                }
+            },
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/hometown"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "home town"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/resource/California"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "California"
+                }
+            },
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "type"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/MusicalArtist"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "musical artist"
+                }
+            },
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "type"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/Person"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "person"
+                }
+            }
+        ]
+
+        parser = ConfigurableParser(facts)
+        parser.process_type = Mock(return_value={})
+        results = parser.parse()
+        self.assertEqual([], results)
+
+
     def test_process_type_opens_the_configuration_for_the_given_type(self):
         facts = [
             {
@@ -232,7 +336,7 @@ class ConfigurableParserTest(AsyncTestCase):
         with patch('builtins.open', m, create=True):
             result = parser.process_type(rdfType)
             self.assertEqual({}, result)
-        
+
 
     def test_generate_results_outputs_correct_id_based_on_the_configuration(self):
         facts = []
