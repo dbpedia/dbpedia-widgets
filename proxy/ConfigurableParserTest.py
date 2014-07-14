@@ -337,7 +337,6 @@ class ConfigurableParserTest(AsyncTestCase):
             result = parser.process_type(rdfType)
             self.assertEqual({}, result)
 
-
     def test_generate_results_outputs_correct_id_based_on_the_configuration(self):
         facts = []
         parser = ConfigurableParser(facts)
@@ -431,6 +430,53 @@ class ConfigurableParserTest(AsyncTestCase):
                             "type": "uri",
                             "value": "http://dbpedia.org/resource/Snoop_Dogg",
                             "label": "Snoop Dogg"
+                        }
+                    ]
+                }
+            ]
+        }
+        self.assertEqual(output['facts'], expectedOutput['facts'])
+
+    def test_generate_results_outputs_a_list_of_unique_facts(self):
+        facts = [
+            {
+                "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/associatedBand" } ,
+                "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "associated band" } ,
+                "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Dr._Dre" } ,
+                "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Dr. Dre" }
+            },
+            {
+                "p": { "type": "uri" , "value": "http://dbpedia.org/property/associatedActs" },
+                "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "associated acts" },
+                "o": { "type": "uri" , "value": "http://dbpedia.org/resource/Dr._Dre" } ,
+                "object_label": { "type": "literal" , "xml:lang": "en" , "value": "Dr. Dre" }
+            }
+        ]
+        configuration = {
+            "Sample": [
+                {
+                    "label": "Related Artist",
+                    "from": ["http://dbpedia.org/ontology/associatedBand", "http://dbpedia.org/property/associatedActs"]
+                }
+            ]
+        }
+        
+        parser = ConfigurableParser(facts)
+        output = parser.generate_results(configuration)
+
+        expectedOutput = {
+            "id": "Sample",
+            "facts": [
+                {
+                    'predicate': {
+                        'value': ["http://dbpedia.org/ontology/associatedBand", "http://dbpedia.org/property/associatedActs"],
+                        'label': 'Related Artist'
+                    },
+                    'objects': [
+                        {
+                            "type": "uri" ,
+                            "value": "http://dbpedia.org/resource/Dr._Dre",
+                            "label": "Dr. Dre"
                         }
                     ]
                 }

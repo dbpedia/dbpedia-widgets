@@ -47,7 +47,8 @@ class ConfigurableParser(object):
                 if 'object_label' in fact:
                     obj['label'] = fact['object_label']['value']
 
-                objects.append(obj)
+                if obj not in objects:
+                    objects.append(obj)
 
             spec_result = {
                 'predicate': {
