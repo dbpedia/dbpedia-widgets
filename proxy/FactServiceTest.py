@@ -12,6 +12,7 @@ from tornado.testing import gen_test
 import string
 from DBpediaEndpoint import DBpediaEndpoint
 from FactService import FactService
+from ConfigurableParser import ConfigurableParser
 import json
 from tornado.concurrent import Future
 
@@ -293,6 +294,24 @@ class FactServiceTest(AsyncTestCase):
         resource = yield self.fact_service.get_resource(resourceURI)
         self.assertTrue('depiction' not in resource)
         
+    
+    @gen_test
+    def test_get_resource_calls_the_configurable_parser(self):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        with patch.object(ConfigurableParser, 'parse') as mock_parser:
+            resource = yield self.fact_service.get_resource(resourceURI)
+            assert mock_parser.called
+
+    @gen_test
+    def test_get_resource_returns_configurable_parser_output_in_facts_key(self):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        expextedOutput = [{ "id": "Sample", "facts": [] }]
+        with patch.object(ConfigurableParser, 'parse') as mock_parser:
+            mock_parser.return_value = expextedOutput
+            resource = yield self.fact_service.get_resource(resourceURI)
+            self.assertEqual(resource['facts'], expextedOutput)
+
+
 
 if __name__ == '__main__':
     unittest.main()

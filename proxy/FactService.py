@@ -1,6 +1,7 @@
 from tornado.gen import coroutine
 import string
 from DBpediaEndpoint import DBpediaEndpoint
+from ConfigurableParser import ConfigurableParser
 
 class FactService(object):
     """docstring for DBpediaEndpoint"""
@@ -33,4 +34,5 @@ class FactService(object):
         if depectionNode:
             result['depiction'] = depectionNode[0]
 
+        result['facts'] = ConfigurableParser(facts).parse()
         return result
