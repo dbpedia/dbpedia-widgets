@@ -200,6 +200,40 @@ class ConfigurableParserTest(AsyncTestCase):
 
         parser.generate_results.assert_called_once_with(json.loads(raw_configuration))
 
+    def test_process_type_returns_an_empty_dict_when_a_configuration_is_not_found(self):
+        facts = [
+            {
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "type"
+                },
+                "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/MusicalArtist"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "musical artist"
+                }
+            }
+        ]
+
+        parser = ConfigurableParser(facts)
+        rdfType = 'http://dbpedia.org/ontology/MusicalArtist'
+        
+        m = mock_open()
+        m.side_effect = FileNotFoundError()
+        
+        with patch('builtins.open', m, create=True):
+            result = parser.process_type(rdfType)
+            self.assertEqual({}, result)
+        
+
     def test_generate_results_outputs_correct_id_based_on_the_configuration(self):
         facts = []
         parser = ConfigurableParser(facts)

@@ -12,9 +12,16 @@ class ConfigurableParser(object):
     def process_type(self, rdf_type):
         config_location = rdf_type.replace('http://', 'configurations/') + ".json"
         result = {}
-        with open(config_location) as f:
-            config = f.read()
-            result = self.generate_results(json.loads(config))
+
+        #try to open the configuration file
+        #if one is not found, return an empty result and continue one
+        try:
+            with open(config_location) as f:
+                config = f.read()
+                result = self.generate_results(json.loads(config))
+        except FileNotFoundError:
+            pass
+
         return result
 
     def generate_results(self, configuration):
