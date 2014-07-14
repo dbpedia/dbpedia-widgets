@@ -1,0 +1,24 @@
+{
+	"Person": [
+		{
+			"label": "Occupation",
+			"from": "http://dbpedia.org/ontology/occupation"
+		},
+		{
+			"label": "Birth Place",
+			"from": "http://dbpedia.org/ontology/birthPlace"
+		},
+		{
+			"label": "Birth Date",
+			"from": "http://dbpedia.org/ontology/birthDate"
+		},
+		{
+			"label": "Death Place",
+			"from": "http://dbpedia.org/ontology/deathPlace"
+		},
+		{
+			"label": "Death Date",
+			"from": "http://dbpedia.org/ontology/deathDate"
+		}
+	]
+}

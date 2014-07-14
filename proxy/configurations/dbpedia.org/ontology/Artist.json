@@ -1,0 +1,19 @@
+{
+	"Musical Artist": [
+		{
+			"label": "Genre",
+			"from": ["http://dbpedia.org/ontology/genre", "http://dbpedia.org/property/genre"]
+		},
+		{
+			"label": "Record Label",
+			"from": "http://dbpedia.org/ontology/recordLabel"
+		},
+		{
+			"label": "Associated Artist",
+			"from": [
+				"http://dbpedia.org/ontology/associatedMusicalArtist",
+				"http://dbpedia.org/property/associatedActs",
+				"http://dbpedia.org/ontology/associatedBand" ]
+		}
+	]
+}
