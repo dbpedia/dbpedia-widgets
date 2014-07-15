@@ -19,12 +19,8 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/birthDate"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Birth date"
+				"value": "http://dbpedia.org/ontology/birthDate",
+				"label": "Birth date"
 			},
 			"objects": [
 				{
@@ -44,12 +40,8 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/birthDate"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Birth date"
+				"value": "http://dbpedia.org/ontology/birthDate",
+				"label": "Birth date"
 			},
 			"objects": [
 				{
@@ -70,31 +62,19 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/occupation"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Occupation"
+				"value": "http://dbpedia.org/ontology/occupation",
+				"label": "Occupation"
 			},
 			"objects": [
 				{
 					"type": "uri",
 					"value": "http://dbpedia.org/resource/Rapping",
-					"object_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Rapping"
-					}
+					"label": "Rapping"
 				},
 				{
 					"type": "uri",
 					"value": "http://dbpedia.org/resource/Actor",
-					"object_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Actor"
-					}
+					"label": "Actor"
 				}
 			]
 		};
@@ -117,7 +97,8 @@ describe("discrete_fact_directive_test", function(){
 			var isolateScope = elm.isolateScope();
 			var obj = {
 				"type": "uri",
-				"value": "http://dbpedia.org/resource/Rapping"
+				"value": "http://dbpedia.org/resource/Rapping",
+				"label": "Rapping"
 			};
 
 			expect(isolateScope.isURI(obj)).toBe(true);
@@ -149,22 +130,14 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/occupation"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Occupation"
+				"value": "http://dbpedia.org/ontology/occupation",
+				"label": "Occupation"
 			},
 			"objects": [
 				{
 					"type": "uri",
 					"value": "http://dbpedia.org/resource/Rapping",
-					"object_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Rapping"
-					}
+					"label": "Rapping"
 				}
 			]
 		};
@@ -180,12 +153,8 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/birthDate"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Birth date"
+				"value": "http://dbpedia.org/ontology/birthDate",
+				"label": "Birth date"
 			},
 			"objects": [
 				{
@@ -224,7 +193,8 @@ describe("discrete_fact_directive_test", function(){
 			var isolateScope = elm.isolateScope();
 			var dateObject = {
 				"type": "uri",
-				"value": "http://dbpedia.org/resource/Rapping"
+				"value": "http://dbpedia.org/resource/Rapping",
+				"label": "Rapping"
 			};
 
 			expect(isolateScope.isDate(dateObject)).toBe(false, 'uri evaluated to true');
@@ -262,12 +232,8 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://dbpedia.org/ontology/birthDate"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Birth date"
+				"value": "http://dbpedia.org/ontology/birthDate",
+				"label": "Birth date"
 			},
 			"objects": [
 				{
@@ -312,7 +278,8 @@ describe("discrete_fact_directive_test", function(){
 
 			obj = {
 				"type": "uri",
-				"value": "http://dbpedia.org/resource/Rapping"
+				"value": "http://dbpedia.org/resource/Rapping",
+				"label": "Rapping"
 			};
 			expect(isolateScope.isLiteral(obj)).toBe(false, 'uri evaluated to true');
 		});
@@ -323,12 +290,8 @@ describe("discrete_fact_directive_test", function(){
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
-				"value": "http://purl.org/dc/elements/1.1/description"
-			},
-			"predicate_label": {
-				"type": "literal",
-				"xml:lang": "en",
-				"value": "Description"
+				"value": "http://purl.org/dc/elements/1.1/description",
+				"label": "Description"
 			},
 			"objects": [
 				{

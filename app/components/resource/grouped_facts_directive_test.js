@@ -19,12 +19,8 @@ describe("grouped_facts_directive_test", function(){
 				{
 					"predicate": {
 						"type": "uri",
-						"value": "http://dbpedia.org/ontology/birthDate"
-					},
-					"predicate_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Birth date"
+						"value": "http://dbpedia.org/ontology/birthDate",
+						"label": "Birth date"
 					},
 					"objects": [
 						{
@@ -37,34 +33,22 @@ describe("grouped_facts_directive_test", function(){
 				{
 					"predicate": {
 						"type": "uri",
-						"value": "http://dbpedia.org/ontology/birthPlace"
-					},
-					"predicate_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Birth place"
+						"value": "http://dbpedia.org/ontology/birthPlace",
+						"label": "Birth place"
 					},
 					"objects": [
 						{
 							"type": "uri",
 							"value": "http://dbpedia.org/resource/New_York_City",
-							"object_label": {
-								"type": "literal",
-								"xml:lang": "en",
-								"value": "New York City"
-							}
+							"label": "New York City"
 						}
 					]
 				},
 				{
 					"predicate": {
 						"type": "uri",
-						"value": "http://dbpedia.org/ontology/deathDate"
-					},
-					"predicate_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Death date"
+						"value": "http://dbpedia.org/ontology/deathDate",
+						"label": "Death date"
 					},
 					"objects": [
 						{
@@ -77,53 +61,33 @@ describe("grouped_facts_directive_test", function(){
 				{
 					"predicate": {
 						"type": "uri",
-						"value": "http://dbpedia.org/ontology/deathPlace"
-					},
-					"predicate_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Death place"
+						"value": "http://dbpedia.org/ontology/deathPlace",
+						"label": "Death place"
 					},
 					"objects": [
 						{
 							"type": "uri",
 							"value": "http://dbpedia.org/resource/Las_Vegas",
-							"object_label": {
-								"type": "literal",
-								"xml:lang": "en",
-								"value": "Las Vegas"
-							}
+							"label": "Las Vegas"
 						}
 					]
 				},
 				{
 					"predicate": {
 						"type": "uri",
-						"value": "http://dbpedia.org/ontology/occupation"
-					},
-					"predicate_label": {
-						"type": "literal",
-						"xml:lang": "en",
-						"value": "Occupation"
+						"value": "http://dbpedia.org/ontology/occupation",
+						"label": "Occupation"
 					},
 					"objects": [
 						{
 							"type": "uri",
 							"value": "http://dbpedia.org/resource/Rapping",
-							"object_label": {
-								"type": "literal",
-								"xml:lang": "en",
-								"value": "Rapping"
-							}
+							"label": "Rapping"
 						},
 						{
 							"type": "uri",
 							"value": "http://dbpedia.org/resource/Actor",
-							"object_label": {
-								"type": "literal",
-								"xml:lang": "en",
-								"value": "Actor"
-							}
+							"label": "Actor"
 						}
 					]
 				}

@@ -5,13 +5,13 @@
 		return {
 			restrict: 'E',
 			template: 
-				'<label class="predicate">{{fact.predicate_label.value}}</label>' +
+				'<label class="predicate">{{fact.predicate.label}}</label>' +
 				'<div class="object">' +
 					'<ul>' + 
 						'<li ng-repeat="object in fact.objects">' +
 							'<span ng-if="isDate(object)">{{parseDate(object)}}</span>' +
 							'<span ng-if="isLiteral(object)">{{object.value}}</span>' +
-							'<a ng-if="isURI(object)" href="{{object.value}}">{{object.object_label.value}}</a>' +
+							'<a ng-if="isURI(object)" href="{{object.value}}">{{object.label}}</a>' +
 						'</li>' +
 					'<ul>' +
 				'</div>',
