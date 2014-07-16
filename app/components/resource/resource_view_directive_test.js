@@ -163,6 +163,11 @@ describe("resource_view_directive_test", function(){
 		expect(heading.html()).toBe('A Sample Abstract');
 	});
 
+	it('should display the depiction of the resource', function () {
+		var depiction = elm.find('img[dbpedia-depiction][resource="resource"]');
+		expect(depiction.length).toBe(1);
+	});
+
 
 	it('should display each of the grouped facts', function() {
 		//make sure a list item is created for each dbpedia-grouped-fact

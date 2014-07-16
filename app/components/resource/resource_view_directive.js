@@ -6,6 +6,7 @@
 			restrict: 'E',
 			template: 
 			//'<div class="wrapper" ng-if="results">' +
+				'<img dbpedia-depiction resource="resource" />' +
 				'<label class="heading">{{ resource.label }}</label>'+
 				'<p class="abstract">{{ resource.abstract }}</p>' + 
 				'<ul>' +
