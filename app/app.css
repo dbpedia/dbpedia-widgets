@@ -8,6 +8,14 @@ header {
 	background-color: rgb(105, 133, 147);
 }
 
+.clear {
+	clear: both;
+}
+
+img[dbpedia-depiction] {
+	float: left;
+}
+
 dbpedia-resource-view{
 	display: block;
 }
@@ -25,14 +33,14 @@ dbpedia-resource-view > ul > li {
 dbpedia-grouped-facts {
 	display: block;
 	margin-bottom: 20px;
-
+	border: 1px solid rgb(245, 246, 250);
 }
 
 /*immediate label children on dbpedia-grouped-facts*/
 dbpedia-grouped-facts > label {
 	background-color: rgb(105, 133, 147);
 	display: block;
-	padding: 15px 0px 15px 10px;
+	padding: 15px 0px 15px 20px;
 	margin: 0;
 	color: white;
 	font-weight: 400;
@@ -46,11 +54,11 @@ dbpedia-grouped-facts > ul {
 }
 
 dbpedia-grouped-facts > ul > li {
-	border: 1px solid rgb(221, 221, 221);
+	border-bottom: 1px solid rgb(221, 221, 221);
 }
 
 
 dbpedia-discrete-fact {
 	display: block;
-	margin: 5px 0px 5px 15px;
+	margin: 5px 0px 15px 30px;
 }
