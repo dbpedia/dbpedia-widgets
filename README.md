@@ -40,18 +40,12 @@ Simple embeddable widgets
     pip install -r requirements.txt
 
 
-## Running Front-end ##
+## Running ##
 
-    #start the default task - builds and launches a server on port 9000
-    gulp
-
-
-## Running Proxy ##
-
-    #activate the virtualenv environment
+    #activate the virtualenv environment - only when using virtualenv
     source env/bin/activate
     
-    #start the server on port 8000
-    python proxy/server.py
-    
-    
+    #start the default task
+    #builds and launches a server on port 9000
+    #launches proxy on port 9000
+    gulp
