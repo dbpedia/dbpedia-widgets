@@ -126,7 +126,7 @@ describe("discrete_fact_directive_test", function(){
 		});
 	});
 
-	it('should display fact objects of type uri as anchors linking to its resource', function () {
+	it('should display fact objects of type uri as anchors linking to its resource details page', function () {
 		scope.fact = {
 			"predicate": {
 				"type": "uri",
@@ -145,7 +145,7 @@ describe("discrete_fact_directive_test", function(){
 		
 		var anchor = elm.find('a[href]');
 		expect(anchor.length).toBe(1, 'anchor tag missing');
-		expect(anchor.attr('href')).toBe('http://dbpedia.org/resource/Rapping', 'incorrect href value');
+		expect(anchor.attr('href')).toBe('/#/detail?uri=http://dbpedia.org/resource/Rapping', 'incorrect href value');
 		expect(anchor.html()).toBe('Rapping');
 	});
 
