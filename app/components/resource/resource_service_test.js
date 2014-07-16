@@ -31,16 +31,7 @@ describe("resource_service_test", function(){
 		it('should make a request using the proxyLocation and uri values provided', function () {
 			var uri = "http://dbpedia.org/resource/Sample";
 			$httpBackend
-				.expectGET(function (str) {
-					//angularjs has a funky way of encoding query string parameters
-					//and it doesn't match the output from encodeURIComponent
-					//so the expectGET fails to match
-					//.expectGET('http://localhost:8000/resource?uri=' + encodeURIComponent(uri))
-
-					//this is an alternate way to match
-					var encodedURI = str.replace('http://localhost:8000/resource?uri=', '');
-					return decodeURIComponent(encodedURI) == uri;
-				})
+				.expectGET('http://localhost:8000/resource/' + uri)
 				.respond(200, '{}');
 
 			resourceService.fetch(uri);
@@ -50,17 +41,9 @@ describe("resource_service_test", function(){
 		it('should return a promise', function () {
 			var uri = "http://dbpedia.org/resource/Sample";
 			var expectedValue = { "sample": "value" };
-			$httpBackend
-				.whenGET(function (str) {
-					//angularjs has a funky way of encoding query string parameters
-					//and it doesn't match the output from encodeURIComponent
-					//so the expectGET fails to match
-					//.expectGET('http://localhost:8000/resource?uri=' + encodeURIComponent(uri))
 
-					//this is an alternate way to match
-					var encodedURI = str.replace('http://localhost:8000/resource?uri=', '');
-					return decodeURIComponent(encodedURI) == uri;
-				})
+			$httpBackend
+				.whenGET('http://localhost:8000/resource/' + uri)
 				.respond(200, JSON.stringify(expectedValue));
 
 			var promise = resourceService.fetch(uri);
