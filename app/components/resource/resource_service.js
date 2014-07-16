@@ -4,10 +4,6 @@
 	function resource($http, proxyLocation) {
 		return {
 			fetch: function (uri) {
-				// var config = {
-				// 	params: { uri: uri } 
-				// };
-				// return $http.get(proxyLocation, config);
 				return $http.get(proxyLocation + "/" + uri);
 			}
 		};
