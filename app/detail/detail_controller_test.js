@@ -4,16 +4,36 @@ describe("detail_controller_test", function(){
     var scope,
         location,
         ctrl,
-        expectedUri = 'http://dbpedia.com/sample/uri';
+        expectedUri = 'http://dbpedia.com/sample/uri',
+        resource,
+        expectedResource = { "sample": "data" };
 
     beforeEach(module('gulp-ng'));
 
-    beforeEach(inject(function($controller, $rootScope, _$location_) {
+    beforeEach(function() {
+        module(function($provide) {
+            //define a proxyLocation value
+            $provide.value('proxyLocation', 'http://localhost:8000/resource');
+        });
+    });
+
+    beforeEach(inject(function($controller, $rootScope, _$location_, _resource_, $q) {
         scope = $rootScope.$new();
         location = _$location_;
+        resource = _resource_;
         var routeParams = {
         	uri: expectedUri
         };
+
+
+        spyOn(resource, 'fetch').andCallFake(function (uri) {
+            var deferred = $q.defer();
+            deferred.resolve({
+                data : expectedResource
+            });
+            return deferred.promise;
+        });
+
         ctrl = $controller('DetailCtrl', {
                     $scope: scope,
                     $routeParams: routeParams
@@ -26,6 +46,10 @@ describe("detail_controller_test", function(){
 	});
 
 	it("should request the facts for the given resource uri", function() {
-    	expect(false).toBe(true);
+        expect(resource.fetch).toHaveBeenCalledWith(expectedUri);
 	});
+
+    it("should set the facts on the scope when the resource is resolved", function() {
+        expect(scope.resource).toEqual(expectedResource);
+    });
 });
