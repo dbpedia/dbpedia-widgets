@@ -81,4 +81,23 @@ gulp.task('connect', plugins.connect.server({
     livereload: true
 }));
 
-gulp.task('default',['connect','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
+var spawn = require('child_process').spawn;
+gulp.task('proxy', function () {
+    var stderr = '';
+    var stdout = '';
+    
+    var cmd = spawn("python",["server.py"], { cwd: process.cwd() + "/proxy" });
+    cmd.stdout.setEncoding('utf8');
+    cmd.stdout.on('data', function (data) {
+        stdout += data;
+        console.log(data);
+    });
+
+    cmd.stderr.setEncoding('utf8');
+    cmd.stderr.on('data', function (data) {
+        stderr += data;
+        console.log(data);
+    });
+});
+
+gulp.task('default',['connect','proxy','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
