@@ -17,6 +17,7 @@ class ResourceHandler(tornado.web.RequestHandler):
     def get(self, uri):
         #raw = yield self.dbpedia_endpoint.fetch(uri)
         result = yield self.fact_service.get_resource(uri)
+        self.add_header('Access-Control-Allow-Origin', '*')
         self.write(json.dumps(result))
 
 

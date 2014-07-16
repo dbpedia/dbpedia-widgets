@@ -36,6 +36,18 @@ class ResourceHandlerTest(AsyncHTTPTestCase):
         self.fetch('/resource/' + resourceURI)
 
         self._fact_service.get_resource.assert_called_once_with(resourceURI)
+       
+
+    @gen_test
+    def test_should_add_the_cors_headers(self):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+        future = Future()
+        future.set_result(None)
+
+        self._fact_service.get_resource = Mock(return_value=future)
+        response = self.fetch('/resource/' + resourceURI)
+        
+        self.assertEqual(response.headers['Access-Control-Allow-Origin'], '*')
         
 
 if __name__ == '__main__':
