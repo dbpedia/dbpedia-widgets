@@ -8,7 +8,8 @@
 			//'<div class="wrapper" ng-if="results">' +
 				'<img dbpedia-depiction resource="resource" />' +
 				'<label class="heading">{{ resource.label }}</label>'+
-				'<p class="abstract">{{ resource.abstract }}</p>' + 
+				'<p class="comment">{{ resource.comment }}</p>' + 
+				'<div class="clear"></div>' + 
 				'<ul>' +
 					'<li ng-repeat="groupedFacts in resource.facts">' + 
 						'<dbpedia-grouped-facts facts="groupedFacts">' +

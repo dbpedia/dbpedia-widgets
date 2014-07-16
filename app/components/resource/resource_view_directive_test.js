@@ -21,6 +21,7 @@ describe("resource_view_directive_test", function(){
 			"depiction": "http://upload.wikimedia.org/wikipedia/commons/1/13/Tupac_Shakur_(rapper),_performing_live.jpg",
 			"type": "http://xmlns.com/foaf/0.1/Person",
 			"abstract": "A Sample Abstract",
+			"comment": "A Sample Comment",
 			"facts": [
 				{
 					"predicate": {
@@ -157,10 +158,10 @@ describe("resource_view_directive_test", function(){
 		expect(heading.html()).toBe('A Sample Label');
 	});
 
-	it('should display the abstract from the resource facts', function() {
-		var heading = elm.find('p.abstract');
+	it('should display the comment from the resource facts', function() {
+		var heading = elm.find('p.comment');
 		expect(heading.length).toBe(1);
-		expect(heading.html()).toBe('A Sample Abstract');
+		expect(heading.html()).toBe('A Sample Comment');
 	});
 
 	it('should display the depiction of the resource', function () {
