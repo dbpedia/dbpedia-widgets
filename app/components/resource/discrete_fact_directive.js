@@ -11,7 +11,7 @@
 						'<li ng-repeat="object in fact.objects">' +
 							'<span ng-if="isDate(object)">{{parseDate(object)}}</span>' +
 							'<span ng-if="isLiteral(object)">{{object.value}}</span>' +
-							'<a ng-if="isURI(object)" href="/#/detail?uri={{object.value}}">{{object.label}}</a>' +
+							'<a ng-if="isURI(object)" href="#/detail?uri={{object.value}}">{{object.label}}</a>' +
 						'</li>' +
 					'<ul>' +
 				'</div>',
