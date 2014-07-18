@@ -22,6 +22,7 @@ describe("resource_view_directive_test", function(){
 			"type": "http://xmlns.com/foaf/0.1/Person",
 			"abstract": "A Sample Abstract",
 			"comment": "A Sample Comment",
+			"wikipedia": "http://en.wikipedia.org/wiki/Sample",
 			"facts": [
 				{
 					"predicate": {
@@ -152,10 +153,22 @@ describe("resource_view_directive_test", function(){
 		expect(elm.is(':empty')).toBe(true);
 	});
 
-	it('should display the label from the resource facts', function() {
-		var heading = elm.find('label.heading');
+	it('should display the label from the resource facts in an anchor', function() {
+		var heading = elm.find('a.heading');
 		expect(heading.length).toBe(1);
 		expect(heading.html()).toBe('A Sample Label');
+	});
+
+	it('should link the label anchor tag to the wikipedia article', function() {
+		var heading = elm.find('a.heading');
+		expect(heading.length).toBe(1);
+		expect(heading.attr("href")).toBe('http://en.wikipedia.org/wiki/Sample');
+	});
+
+	it('should open the label anchor tag in a new window', function() {
+		var heading = elm.find('a.heading');
+		expect(heading.length).toBe(1);
+		expect(heading.attr("target")).toBe('_blank');
 	});
 
 	it('should display the comment from the resource facts', function() {

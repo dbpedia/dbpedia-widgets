@@ -7,7 +7,7 @@
 			template: 
 			//'<div class="wrapper" ng-if="results">' +
 				'<img dbpedia-depiction resource="resource" />' +
-				'<label class="heading">{{ resource.label }}</label>'+
+				'<a class="heading" href="{{ resource.wikipedia }}" target="_blank">{{ resource.label }}</a>'+
 				'<p class="comment">{{ resource.comment }}</p>' + 
 				'<div class="clear"></div>' + 
 				'<ul>' +
