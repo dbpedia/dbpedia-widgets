@@ -58,6 +58,7 @@ class ConfigurableParser(object):
                 'objects': objects
             }
 
-            output['facts'].append(spec_result)
+            if spec_result['objects']:
+                output['facts'].append(spec_result)
 
         return output

@@ -484,5 +484,34 @@ class ConfigurableParserTest(AsyncTestCase):
         }
         self.assertEqual(output['facts'], expectedOutput['facts'])
 
+
+    def test_generate_results_outputs_a_list_with_non_relevant_facts_stripped_out(self):
+        facts = [
+            {
+                "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/birthDate" } ,
+                "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "birth date" } ,
+                "o": { "datatype": "http://www.w3.org/2001/XMLSchema#date" , "type": "typed-literal" , "value": "1971-06-15+02:00" }
+            }
+        ]
+        configuration = {
+            "Sample": [
+                #irrelevant fact since its not found in the facts
+                {
+                    "label": "Death Date",
+                    "from": "http://dbpedia.org/ontology/deathDate"
+                }
+            ]
+        }
+        
+        parser = ConfigurableParser(facts)
+        output = parser.generate_results(configuration)
+
+        expectedOutput = {
+            "id": "Sample",
+            "facts": []
+        }
+        self.assertEqual(output['facts'], expectedOutput['facts'])
+
+
 if __name__ == '__main__':
     unittest.main()
