@@ -21,11 +21,13 @@ class FactService(object):
         thumbnailNode = self.filter_facts(facts, "http://dbpedia.org/ontology/thumbnail")
         abstractNode = self.filter_facts(facts, "http://dbpedia.org/ontology/abstract")
         commentNode = self.filter_facts(facts, "http://www.w3.org/2000/01/rdf-schema#comment")
+        wikipediaNode = self.filter_facts(facts, "http://xmlns.com/foaf/0.1/isPrimaryTopicOf")
 
         result = {
             "label": labelNode[0],
             "abstract": abstractNode[0],
-            "comment": commentNode[0]
+            "comment": commentNode[0],
+            "wikipedia": wikipediaNode[0]
         }
 
         if thumbnailNode:

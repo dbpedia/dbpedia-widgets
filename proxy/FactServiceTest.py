@@ -97,6 +97,20 @@ class FactServiceTest(AsyncTestCase):
                     "type": "literal",
                     "value": "comment"
                 }
+            },
+            {
+                "o": {
+                    "type": "uri",
+                    "value": "http://en.wikipedia.org/wiki/Sample"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://xmlns.com/foaf/0.1/isPrimaryTopicOf"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "is primary topic of"
+                }
             }
         ]
 
@@ -154,6 +168,14 @@ class FactServiceTest(AsyncTestCase):
         expected = 'Sample Comment'
         self.assertEqual(expected, resource['comment'])
 
+
+    @gen_test
+    def test_get_resource_retrieves_the_wikipedia_link(self):
+        resourceURI = 'http://dbpedia.org/resource/Sample'
+
+        resource = yield self.fact_service.get_resource(resourceURI)
+        expected = 'http://en.wikipedia.org/wiki/Sample'
+        self.assertEqual(expected, resource['wikipedia'])
 
     @gen_test
     def test_get_resource_doesnt_retrieve_the_thumbnail_when_missing(self):
@@ -220,6 +242,20 @@ class FactServiceTest(AsyncTestCase):
                     "type": "literal",
                     "value": "comment"
                 }
+            },
+            {
+                "o": {
+                    "type": "uri",
+                    "value": "http://en.wikipedia.org/wiki/Sample"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://xmlns.com/foaf/0.1/isPrimaryTopicOf"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "is primary topic of"
+                }
             }
         ]
 
@@ -282,6 +318,20 @@ class FactServiceTest(AsyncTestCase):
                     "xml: lang": "en",
                     "type": "literal",
                     "value": "comment"
+                }
+            },
+            {
+                "o": {
+                    "type": "uri",
+                    "value": "http://en.wikipedia.org/wiki/Sample"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://xmlns.com/foaf/0.1/isPrimaryTopicOf"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "is primary topic of"
                 }
             }
         ]
