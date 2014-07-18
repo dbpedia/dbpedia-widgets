@@ -3,7 +3,7 @@
 	'use strict';
 
 	angular.module('gulp-ng')
-			.controller('ApplicationCtrl', ['$scope', '$location', function ($scope, $location) {
+			.controller('ApplicationCtrl', ['$scope', '$location', '$window', function ($scope, $location, $window) {
 				//$scope.resourceSelected = {};
 				$scope.$watch('resourceSelected', function (newVal, oldVal) {
 					if (newVal === oldVal){ //no change
@@ -12,6 +12,10 @@
 
 					$location.path('/detail');
 					$location.search('uri', newVal.uri);
+				});
+
+				$scope.$on('$routeChangeSuccess', function (evnt) {
+					$window._gaq.push(['_trackPageview', $location.path()]);
 				});
 			}]);
 })();
