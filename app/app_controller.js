@@ -15,7 +15,7 @@
 				});
 
 				$scope.$on('$routeChangeSuccess', function (evnt) {
-					$window._gaq.push(['_trackPageview', $location.path()]);
+					$window.ga('send', 'pageview', $location.url());
 				});
 			}]);
 })();

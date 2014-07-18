@@ -45,15 +45,15 @@ describe("app_controller_test", function(){
 	});
 
     it('should notify google analytics on every routeChangeSuccess event', function () {
-        $window._gaq = [];
-        spyOn($window._gaq, 'push');
+        $window.ga = function () {};
+        spyOn($window, 'ga');
         
         //mock the path fn output
-        location.path = function () {
-            return "/detail";
+        location.url = function () {
+            return "#/detail?uri=http://dbpedia.org/resource/Sample";
         };
 
         scope.$emit('$routeChangeSuccess');
-        expect($window._gaq.push).toHaveBeenCalledWith(['_trackPageview', location.path()]);
+        expect($window.ga).toHaveBeenCalledWith('send', 'pageview', location.url());
     });
 });
