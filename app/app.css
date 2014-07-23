@@ -25,6 +25,22 @@ dbpedia-resource-view .comment{
 	display: none;
 }
 
+.grouped-heading {
+	background-color: rgb(105, 133, 147);
+	display: block;
+	padding: 5px 0px 5px 20px;
+	margin: 0;
+	color: white;
+	font-weight: 400;
+}
+
+.discrete-fact {
+	background-color: white;
+	display: block;
+	margin-bottom: 20px;
+	border: 1px solid rgb(245, 246, 250);
+}
+
 dbpedia-resource-view > .media{
 	text-align: center;
 }

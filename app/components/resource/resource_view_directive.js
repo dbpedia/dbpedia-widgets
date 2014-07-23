@@ -25,6 +25,12 @@
                     '</div>' +
                 '</div>' +
                 '<div class="clear"></div>' +
+                '<div>' +
+                    '<label class="grouped-heading">About</label>' +
+                    '<p class="discrete-fact">' +
+                        '{{ resource.comment }}' +
+                    '</p>' +
+                '</div>' +
                 '<ul>' +
                     '<li ng-repeat="groupedFacts in resource.facts">' + 
                         '<dbpedia-grouped-facts facts="groupedFacts">' +
