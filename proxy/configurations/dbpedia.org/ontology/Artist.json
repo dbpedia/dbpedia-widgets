@@ -13,7 +13,8 @@
 			"from": [
 				"http://dbpedia.org/ontology/associatedMusicalArtist",
 				"http://dbpedia.org/property/associatedActs",
-				"http://dbpedia.org/ontology/associatedBand" ]
+				"http://dbpedia.org/ontology/associatedBand" ],
+			"limit": 10
 		}
 	]
 }

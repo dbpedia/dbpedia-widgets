@@ -47,6 +47,9 @@ class ConfigurableParser(object):
                 if 'object_label' in fact:
                     obj['label'] = fact['object_label']['value']
 
+                if obj['type'] == 'uri' and 'label' not in obj:
+                    continue
+                
                 if obj not in objects:
                     objects.append(obj)
 
@@ -57,6 +60,9 @@ class ConfigurableParser(object):
                 },
                 'objects': objects
             }
+
+            if 'limit' in spec:
+                spec_result['objects'] = spec_result['objects'][:spec['limit']]
 
             if spec_result['objects']:
                 output['facts'].append(spec_result)

@@ -13,7 +13,7 @@
 							'<span ng-if="isLiteral(object)">{{object.value}}</span>' +
 							'<a ng-if="isURI(object)" href="#/detail?uri={{object.value}}">{{object.label}}</a>' +
 						'</li>' +
-					'<ul>' +
+					'</ul>' +
 				'</div>',
 			scope: {
 				fact: '='
