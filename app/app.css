@@ -13,11 +13,20 @@ header {
 }
 
 img[dbpedia-depiction] {
-	float: left;
+	/*float: left;*/
+	max-height: 120px;max-width: 120px;text-align: center;margin: 0 auto;float:none;
 }
 
 dbpedia-resource-view{
 	display: block;
+}
+
+dbpedia-resource-view .comment{
+	display: none;
+}
+
+dbpedia-resource-view > .media{
+	text-align: center;
 }
 
 dbpedia-resource-view > ul{

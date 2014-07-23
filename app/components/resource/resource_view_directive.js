@@ -11,10 +11,10 @@
                 // '<p class="comment">{{ resource.comment }}</p>' + 
                 // '<div class="clear"></div>' + 
 
-                '<div class="media" style="overflow:visible;">' +
-                    '<div class="pull-left thumbnail" href="#">' +
-                        '<img class="media-object" dbpedia-depiction resource="resource">' +
-                    '</div>' +
+                '<div class="media">' +
+                    //'<div>' +
+                        '<img class="media-object img-thumbnail" dbpedia-depiction resource="resource">' +
+                    //'</div>' +
                     '<div class="media-body" style="overflow:visible;">' +
                         '<h4 class="media-heading">' +
                             '<a class="heading" href="{{ resource.wikipedia }}" target="_blank">' +
