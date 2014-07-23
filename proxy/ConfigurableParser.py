@@ -58,6 +58,9 @@ class ConfigurableParser(object):
                 'objects': objects
             }
 
+            if 'limit' in spec:
+                spec_result['objects'] = spec_result['objects'][:spec['limit']]
+
             if spec_result['objects']:
                 output['facts'].append(spec_result)
 
