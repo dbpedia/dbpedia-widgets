@@ -12,18 +12,11 @@ header {
 	clear: both;
 }
 
-img[dbpedia-depiction] {
-	/*float: left;*/
-	max-height: 120px;max-width: 120px;text-align: center;margin: 0 auto;float:none;
-}
 
 dbpedia-resource-view{
 	display: block;
 }
 
-dbpedia-resource-view .comment{
-	display: none;
-}
 
 .grouped-heading {
 	background-color: rgb(105, 133, 147);
@@ -39,6 +32,7 @@ dbpedia-resource-view .comment{
 	display: block;
 	margin-bottom: 20px;
 	border: 1px solid rgb(245, 246, 250);
+	white-space: normal;
 }
 
 dbpedia-resource-view > .media{

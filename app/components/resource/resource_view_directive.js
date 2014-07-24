@@ -25,18 +25,16 @@
                     '</div>' +
                 '</div>' +
                 '<div class="clear"></div>' +
-                '<div>' +
-                    '<label class="grouped-heading">About</label>' +
-                    '<p class="discrete-fact">' +
-                        '{{ resource.comment }}' +
-                    '</p>' +
-                '</div>' +
-                '<ul>' +
-                    '<li ng-repeat="groupedFacts in resource.facts">' + 
-                        '<dbpedia-grouped-facts facts="groupedFacts">' +
-                        '</dbpedia-grouped-facts>' +
-                    '</li>' +
-                '</ul>',
+                '<div class="grouped-facts-container">' +
+                    '<div>' +
+                        '<label class="grouped-heading">About</label>' +
+                        '<p class="discrete-fact">' +
+                            '{{ resource.comment }}' +
+                        '</p>' +
+                    '</div>' +
+                    '<dbpedia-grouped-facts facts="groupedFacts" ng-repeat="groupedFacts in resource.facts">' +
+                    '</dbpedia-grouped-facts>' +
+                '</div>',
             //'</div>',
             scope: {
                 resource: '='       //two-way parent scope binding

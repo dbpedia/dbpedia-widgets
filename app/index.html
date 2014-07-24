@@ -7,8 +7,9 @@
     <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <link href="lib.css" rel="stylesheet">
     <link href="app.css" rel="stylesheet">
+    <link href="embed-mode.css" rel="stylesheet">
   </head>
-  <body ng-app="gulp-ng" ng-controller="ApplicationCtrl">
+  <body ng-app="gulp-ng" ng-controller="ApplicationCtrl" style="overflow: hidden;" ng-class="{'embed-mode': embed }">
 
     <header ng-if="!embed">
       <div class="container">
