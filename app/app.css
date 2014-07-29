@@ -4,7 +4,6 @@ dbpedia-discrete-fact {
 	margin: 5px 20px 5px 30px;
 }
 
-
 dbpedia-discrete-fact > div.object > ul > li {
 	display: inline-block;
 	padding: .2em .6em .3em;
