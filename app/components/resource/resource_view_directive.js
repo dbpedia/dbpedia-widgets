@@ -5,37 +5,35 @@
         return {
             restrict: 'E',
             template: 
-            //'<div class="wrapper" ng-if="results">' +
-                // '<img dbpedia-depiction resource="resource" />' +
-                // '<a class="heading" href="{{ resource.wikipedia }}" target="_blank">{{ resource.label }}</a>'+
-                // '<p class="comment">{{ resource.comment }}</p>' + 
-                // '<div class="clear"></div>' + 
-
-                '<div class="media">' +
-                    //'<div>' +
+                //'<div class="card" style="height: 100%;">' +
+                    '<div class="resource-depiction">' +
                         '<img class="media-object img-thumbnail" dbpedia-depiction resource="resource">' +
-                    //'</div>' +
-                    '<div class="media-body" style="overflow:visible;">' +
-                        '<h4 class="media-heading">' +
-                            '<a class="heading" href="{{ resource.wikipedia }}" target="_blank">' +
-                                '{{ resource.label }}' +
-                            '</a>' +
-                        '</h4>' +
+                    '</div>' +
+                    // '<div class="media-body" style="overflow:visible;">' +
+                    //     '<h4 class="media-heading">' +
+                    //         '<a class="heading" href="{{ resource.wikipedia }}" target="_blank">' +
+                    //             '{{ resource.label }}' +
+                    //         '</a>' +
+                    //     '</h4>' +
+                    //     '<p class="comment">{{ resource.comment }}</p>' + 
+                    // '</div>' +
+                    '<div class="resource-header">' +
+                        '<a class="heading" href="{{ resource.wikipedia }}" target="_blank">' +
+                            '{{ resource.label }}' +
+                        '</a>' +
                         '<p class="comment">{{ resource.comment }}</p>' + 
                     '</div>' +
-                '</div>' +
-                '<div class="clear"></div>' +
-                '<div class="grouped-facts-container">' +
-                    '<div>' +
-                        '<label class="grouped-heading">About</label>' +
-                        '<p class="discrete-fact">' +
-                            '{{ resource.comment }}' +
-                        '</p>' +
-                    '</div>' +
-                    '<dbpedia-grouped-facts facts="groupedFacts" ng-repeat="groupedFacts in resource.facts">' +
-                    '</dbpedia-grouped-facts>' +
-                '</div>',
-            //'</div>',
+                    '<div class="grouped-facts-container card-copy">' +
+                        '<div class="generic-facts">' +
+                            '<label class="group-header">About</label>' +
+                            '<p class="content">' +
+                                '{{ resource.comment }}' +
+                            '</p>' +
+                        '</div>' +
+                        '<dbpedia-grouped-facts facts="groupedFacts" ng-repeat="groupedFacts in resource.facts">' +
+                        '</dbpedia-grouped-facts>' +
+                    '</div>',// +
+                //'</div>',
             scope: {
                 resource: '='       //two-way parent scope binding
             }

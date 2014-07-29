@@ -23,12 +23,12 @@ dbpedia-resource-view{
 	display: block;
 	padding: 5px 0px 5px 20px;
 	margin: 0;
-	color: white;
+	/*color: white;*/
 	font-weight: 400;
 }
 
 .discrete-fact {
-	background-color: white;
+	/*background-color: white;*/
 	display: block;
 	margin-bottom: 20px;
 	border: 1px solid rgb(245, 246, 250);
@@ -51,7 +51,7 @@ dbpedia-resource-view > ul > li {
 
 dbpedia-grouped-facts {
 	display: block;
-	margin-bottom: 20px;
+	/*margin-bottom: 20px;*/
 	border: 1px solid rgb(245, 246, 250);
 }
 
@@ -61,7 +61,7 @@ dbpedia-grouped-facts > label {
 	display: block;
 	padding: 15px 0px 15px 20px;
 	margin: 0;
-	color: white;
+	/*color: white;*/
 	font-weight: 400;
 }
 
@@ -79,7 +79,8 @@ dbpedia-grouped-facts > ul > li {
 
 dbpedia-discrete-fact {
 	display: block;
-	margin: 5px 0px 15px 30px;
+	/*margin: 5px 0px 15px 30px;*/
+	margin: 5px 20px 5px 30px;
 }
 
 

@@ -100,12 +100,17 @@ gulp.task('proxy', function () {
     });
 });
 
-gulp.task('default',['connect','proxy','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
+
 var sass = require('gulp-sass');
+
+var paths = ['app/sass', 'app/components/sass']
+                .concat(require('node-bourbon').includePaths)
+                .concat(require('node-neat').includePaths);
+
 var options = {
     // includePaths: require('node-bourbon').with('other/path', 'another/path')
     // - or -
-    includePaths: require('node-bourbon').includePaths.concat(require('node-neat').includePaths).concat(['app/sass'])
+    includePaths: paths
 };
 gulp.task('sass', function () {
     gulp.src('app/**/*.scss')
@@ -113,3 +118,4 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('build'));
 });
 
+gulp.task('default',['connect','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
