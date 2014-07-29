@@ -14,7 +14,7 @@
                     '</a>' +
                     '<p class="comment">{{ resource.comment }}</p>' + 
                 '</div>' +
-                '<div class="grouped-facts-container card-copy">' +
+                '<div class="grouped-facts-container">' +
                     '<div class="generic-facts">' +
                         '<label class="group-header">About</label>' +
                         '<p class="content">' +
