@@ -118,4 +118,4 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('default',['connect','scripts','templates','sass', 'css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
+gulp.task('default',['connect','proxy','scripts','templates','sass','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
