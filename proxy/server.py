@@ -23,7 +23,10 @@ class ResourceHandler(tornado.web.RequestHandler):
             self.write(json.dumps(result))
         except ResourceRedirect as e:
             self.add_header('Location', '/resource/' + e.redirect_resource)
-            self.set_status(303)
+            self.set_status(303) #See other
+        except Exception as e:
+            self.write(json.dumps({}))
+            self.set_status(502) #Bad Gateway
 
         
         
