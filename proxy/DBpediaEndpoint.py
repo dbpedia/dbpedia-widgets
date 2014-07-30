@@ -13,6 +13,8 @@ class DBpediaEndpoint(object):
         endpointURL = 'http://dbpedia.org/sparql'
         http_client = AsyncHTTPClient()
         headers = dict(accept = 'application/json')
+        print(self.facts_url(uri))
+        print(self.inverse_facts_url(uri))
         facts_response, inverse_facts_response = yield [
             http_client.fetch(self.facts_url(uri), headers = headers), 
             http_client.fetch(self.inverse_facts_url(uri), headers = headers)
@@ -55,6 +57,7 @@ class DBpediaEndpoint(object):
         sparql = string.Template(
             """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX dbpedia: <http://dbpedia.org/ontology/>
             SELECT DISTINCT ?p ?predicate_label ?o ?object_label WHERE {
                 ?o ?p <$resource>.
                 ?p rdfs:label ?predicate_label.
@@ -62,6 +65,7 @@ class DBpediaEndpoint(object):
 
                 FILTER((LANG(?predicate_label) = "" || langMatches(lang(?predicate_label), "EN")))
                 FILTER(LANG(?object_label) = "" || langMatches(lang(?object_label), "EN"))
+                MINUS { ?o dbpedia:wikiPageRedirects ?r }
             }"""
             ).substitute(resource=uri)
 

@@ -1,6 +1,7 @@
 import tornado.ioloop
 import tornado.web
 from FactService import FactService
+from FactService import ResourceRedirect
 from tornado.gen import coroutine
 import json
 
@@ -15,10 +16,29 @@ class ResourceHandler(tornado.web.RequestHandler):
 
     @coroutine
     def get(self, uri):
+        
+        try:
+            result = yield self.fact_service.get_resource(uri)
+        except ResourceRedirect as e:
+            print("redirect")
+
+            result = {
+                "status": "redirect",
+                "data": {
+                    "requested": e.requested_resource,
+                    "redirect": e.redirect_resource
+                }
+            }
+            self.add_header('Location', '/resource/' + e.redirect_resource)
+            self.set_status(303)
+
         #raw = yield self.dbpedia_endpoint.fetch(uri)
-        result = yield self.fact_service.get_resource(uri)
+        
+
+
         self.add_header('Access-Control-Allow-Origin', '*')
         self.write(json.dumps(result))
+
 
 
 def main():

@@ -3,6 +3,14 @@ import string
 from DBpediaEndpoint import DBpediaEndpoint
 from ConfigurableParser import ConfigurableParser
 
+class ResourceRedirect(Exception):
+    """docstring for ResourceRedirect"""
+    def __init__(self, requested_resource, redirect_resource):
+        Exception.__init__(self, "The resource requested redirects to another resource.")
+        self.requested_resource = requested_resource
+        self.redirect_resource = redirect_resource
+        
+
 class FactService(object):
     """docstring for DBpediaEndpoint"""
     
@@ -15,6 +23,12 @@ class FactService(object):
     @coroutine
     def get_resource(self, uri):
         facts = yield self.endpoint.fetch(uri)
+
+        redirectNodes = self.filter_facts(facts, "http://dbpedia.org/ontology/wikiPageRedirects")
+
+        print(redirectNodes)
+        if redirectNodes:
+            raise ResourceRedirect(uri, redirectNodes[0])
 
         labelNode = self.filter_facts(facts, "http://www.w3.org/2000/01/rdf-schema#label")
         depectionNode = self.filter_facts(facts, "http://xmlns.com/foaf/0.1/depiction")

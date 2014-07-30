@@ -12,9 +12,19 @@ from tornado.testing import gen_test
 import string
 from DBpediaEndpoint import DBpediaEndpoint
 from FactService import FactService
+from FactService import ResourceRedirect
 from ConfigurableParser import ConfigurableParser
 import json
 from tornado.concurrent import Future
+
+
+class ResourceRedirectTest(AsyncTestCase):
+    def test_constructor_assigns_parameters(self):
+        requested_resource = "original"
+        redirect_resource = "redirect"
+        e = ResourceRedirect(requested_resource, redirect_resource)
+        self.assertEqual(e.requested_resource, requested_resource)
+        self.assertEqual(e.redirect_resource, redirect_resource)
 
 
 class FactServiceTest(AsyncTestCase):
@@ -362,6 +372,121 @@ class FactServiceTest(AsyncTestCase):
             self.assertEqual(resource['facts'], expextedOutput)
 
 
+    @gen_test
+    def test_get_resource_raises_a_redirect_exception_with_wiki_page_redirect(self):
+        resourceURI = 'http://dbpedia.org/resource/2pac'
+
+        response = [
+            {
+                "o": {
+                    "xml: lang": "en",
+                    "type": "literal",
+                    "value": "2pac"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/2000/01/rdf-schema#label"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "label"
+                }
+            },
+            {
+                 "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/resource/Tupac_Shakur"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "Tupac Shakur"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/wikiPageRedirects"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "Wikipage redirect"
+                }
+            }
+        ]
+
+        future = Future()
+        future.set_result(response)
+
+        self.dbpedia_endpoint.fetch = Mock(return_value=future)
+
+        with self.assertRaises(ResourceRedirect) as context:
+            yield self.fact_service.get_resource(resourceURI)
+
+
+
+    @gen_test
+    def test_get_resource_doesnt_raise_a_redirect_exception_with_wiki_page_redirect_to_original_uri(self):
+        resourceURI = 'http://dbpedia.org/resource/Tupac_Shakur'
+
+        response = [
+            {
+                "o": {
+                    "xml: lang": "en",
+                    "type": "literal",
+                    "value": "Tupac Shakur"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://www.w3.org/2000/01/rdf-schema#label"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "value": "label"
+                }
+            },
+            {
+                 "o": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/resource/Tupac_Shakur"
+                },
+                "object_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "Tupac Shakur"
+                },
+                "p": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/ontology/wikiPageRedirects"
+                },
+                "predicate_label": {
+                    "type": "literal",
+                    "xml:lang": "en",
+                    "value": "Wikipage redirect"
+                }
+            }
+        ]
+
+        future = Future()
+        future.set_result(response)
+
+        self.dbpedia_endpoint.fetch = Mock(return_value=future)
+
+        test_pass = True
+        try:
+            yield self.fact_service.get_resource(resourceURI)
+        except ResourceRedirect as e:
+            test_pass = False
+        except:
+            #we dont care about any other exceptions
+            #only a ResourceRedirect exception should cause the
+            #test to fail
+            pass
+
+        self.assertTrue(test_pass)
+
+        
 
 if __name__ == '__main__':
     unittest.main()
+
+
