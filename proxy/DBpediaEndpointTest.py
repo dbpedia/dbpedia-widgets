@@ -55,6 +55,7 @@ class DBpediaEndpointTest(AsyncTestCase):
         sparql = string.Template(
             """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            PREFIX dbpedia: <http://dbpedia.org/ontology/>
             SELECT DISTINCT ?p ?predicate_label ?o ?object_label WHERE {
                 ?o ?p <$resource>.
                 ?p rdfs:label ?predicate_label.
@@ -62,6 +63,7 @@ class DBpediaEndpointTest(AsyncTestCase):
 
                 FILTER((LANG(?predicate_label) = "" || langMatches(lang(?predicate_label), "EN")))
                 FILTER(LANG(?object_label) = "" || langMatches(lang(?object_label), "EN"))
+                MINUS { ?o dbpedia:wikiPageRedirects ?r }
             }"""
             ).substitute(resource=resourceURI)
 
