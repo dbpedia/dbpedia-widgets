@@ -161,6 +161,29 @@ class DBpediaEndpointTest(AsyncTestCase):
             ]
             self.assertEqual(results, expectedResults)
         
+    def test_parse_response_replaces_invalid_unicode_from_response_body(self):
+        body = b"""
+        {
+            "head": {
+                "vars": [ "p" , "predicate_label" , "o" , "object_label" ]
+            },
+            "results": {
+                "bindings": [
+                    {
+                        "unicode_field" : "\U00f8C",
+                        "p": { "type": "uri" , "value": "http://dbpedia.org/ontology/hometown" },
+                        "predicate_label": { "type": "literal" , "xml:lang": "en" , "value": "home town" },
+                        "o": { "type": "uri" , "value": "http://dbpedia.org/resource/California" },
+                        "object_label": { "type": "literal" , "xml:lang": "en" , "value": "California" }
+                    }
+                ]
+            }
+        }
+        """
+        response = Mock()
+        response.body = body
+        result = self.dbpedia_endpoint.parse_response(response)
+        self.assertEqual(result[0]["unicode_field"], "\u00f8C")
 
 if __name__ == '__main__':
     unittest.main()
