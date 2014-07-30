@@ -26,7 +26,6 @@ class FactService(object):
 
         redirectNodes = self.filter_facts(facts, "http://dbpedia.org/ontology/wikiPageRedirects")
 
-        print(redirectNodes)
         if redirectNodes:
             raise ResourceRedirect(uri, redirectNodes[0])
 

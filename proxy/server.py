@@ -20,8 +20,6 @@ class ResourceHandler(tornado.web.RequestHandler):
         try:
             result = yield self.fact_service.get_resource(uri)
         except ResourceRedirect as e:
-            print("redirect")
-
             result = {
                 "status": "redirect",
                 "data": {

@@ -422,68 +422,6 @@ class FactServiceTest(AsyncTestCase):
         with self.assertRaises(ResourceRedirect) as context:
             yield self.fact_service.get_resource(resourceURI)
 
-
-
-    @gen_test
-    def test_get_resource_doesnt_raise_a_redirect_exception_with_wiki_page_redirect_to_original_uri(self):
-        resourceURI = 'http://dbpedia.org/resource/Tupac_Shakur'
-
-        response = [
-            {
-                "o": {
-                    "xml: lang": "en",
-                    "type": "literal",
-                    "value": "Tupac Shakur"
-                },
-                "p": {
-                    "type": "uri",
-                    "value": "http://www.w3.org/2000/01/rdf-schema#label"
-                },
-                "predicate_label": {
-                    "type": "literal",
-                    "value": "label"
-                }
-            },
-            {
-                 "o": {
-                    "type": "uri",
-                    "value": "http://dbpedia.org/resource/Tupac_Shakur"
-                },
-                "object_label": {
-                    "type": "literal",
-                    "xml:lang": "en",
-                    "value": "Tupac Shakur"
-                },
-                "p": {
-                    "type": "uri",
-                    "value": "http://dbpedia.org/ontology/wikiPageRedirects"
-                },
-                "predicate_label": {
-                    "type": "literal",
-                    "xml:lang": "en",
-                    "value": "Wikipage redirect"
-                }
-            }
-        ]
-
-        future = Future()
-        future.set_result(response)
-
-        self.dbpedia_endpoint.fetch = Mock(return_value=future)
-
-        test_pass = True
-        try:
-            yield self.fact_service.get_resource(resourceURI)
-        except ResourceRedirect as e:
-            test_pass = False
-        except:
-            #we dont care about any other exceptions
-            #only a ResourceRedirect exception should cause the
-            #test to fail
-            pass
-
-        self.assertTrue(test_pass)
-
         
 
 if __name__ == '__main__':
