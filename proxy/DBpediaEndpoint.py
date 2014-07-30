@@ -22,7 +22,7 @@ class DBpediaEndpoint(object):
         return facts + inverse_facts
 
     def parse_response(self, response):
-        return json.loads(response.body.decode())['results']['bindings']
+        return json.loads(response.body.replace(b"\U", b"\u").decode())['results']['bindings']
 
 
     def facts_url(self, uri):
