@@ -17,25 +17,16 @@ class ResourceHandler(tornado.web.RequestHandler):
     @coroutine
     def get(self, uri):
         
+        self.add_header('Access-Control-Allow-Origin', '*')
         try:
             result = yield self.fact_service.get_resource(uri)
+            self.write(json.dumps(result))
         except ResourceRedirect as e:
-            result = {
-                "status": "redirect",
-                "data": {
-                    "requested": e.requested_resource,
-                    "redirect": e.redirect_resource
-                }
-            }
             self.add_header('Location', '/resource/' + e.redirect_resource)
             self.set_status(303)
 
-        #raw = yield self.dbpedia_endpoint.fetch(uri)
         
-
-
-        self.add_header('Access-Control-Allow-Origin', '*')
-        self.write(json.dumps(result))
+        
 
 
 

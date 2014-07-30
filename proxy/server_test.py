@@ -62,17 +62,9 @@ class ResourceHandlerTest(AsyncHTTPTestCase):
 
         self._fact_service.get_resource = Mock(side_effect = ResourceRedirect('a', 'b'))#return_value=future)
         response = self.fetch('/resource/' + resourceURI)
-        print(response)
-        body = response.body
-        expected_results = {
-            "status": "redirect",
-            "data": {
-                "requested": "a",
-                "redirect": "b"
-            }
-        }
-        # print(body)
-        self.assertEqual(json.loads(body.decode()), expected_results)
+        print('r', response.headers['Location'])
+        self.assertEqual(response.code, 303)
+        self.assertEqual(response.headers['Location'], "/resource/b")
         
         
 
