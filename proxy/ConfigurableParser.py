@@ -1,5 +1,4 @@
 import json
-from dbpedia.PageRankRankerTest import PageRankRanker
 from tornado.gen import coroutine
 
 class ConfigurableParser(object):

@@ -3,8 +3,6 @@ import string
 from DBpediaEndpoint import DBpediaEndpoint
 from ConfigurableParser import ConfigurableParser
 
-from dbpedia.PageRankEndpointTest import PageRankEndpoint
-from dbpedia.PageRankRankerTest import PageRankRanker
 from summarum import RankingService
 
 class ResourceRedirect(Exception):
