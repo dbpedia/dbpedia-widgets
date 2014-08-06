@@ -3,6 +3,10 @@ import string
 from DBpediaEndpoint import DBpediaEndpoint
 from ConfigurableParser import ConfigurableParser
 
+from dbpedia.PageRankEndpointTest import PageRankEndpoint
+from dbpedia.PageRankRankerTest import PageRankRanker
+from summarum import RankingService
+
 class ResourceRedirect(Exception):
     """docstring for ResourceRedirect"""
     def __init__(self, requested_resource, redirect_resource):
@@ -22,6 +26,14 @@ class FactService(object):
 
     @coroutine
     def get_resource(self, uri):
+        # facts = []
+        # try:
+        #     pass
+        # except Exception as e:
+        #     #this is an error we cant recover for
+        #     #the resource is not available
+        #     raise
+
         facts = yield self.endpoint.fetch(uri)
 
         redirectNodes = self.filter_facts(facts, "http://dbpedia.org/ontology/wikiPageRedirects")
@@ -49,5 +61,11 @@ class FactService(object):
         if depectionNode:
             result['depiction'] = depectionNode[0]
 
-        result['facts'] = ConfigurableParser(facts).parse()
+        # turtle = yield PageRankEndpoint().fetch(uri)
+        # ranker = PageRankRanker(turtle)
+
+        ranking_service = RankingService(uri)
+        print('ranking_service started')
+
+        result['facts'] = yield ConfigurableParser(facts, ranker = ranking_service).parse()
         return result

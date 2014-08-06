@@ -358,7 +358,12 @@ class FactServiceTest(AsyncTestCase):
     @gen_test
     def test_get_resource_calls_the_configurable_parser(self):
         resourceURI = 'http://dbpedia.org/resource/Sample'
-        with patch.object(ConfigurableParser, 'parse') as mock_parser:
+        future = Future()
+        future.set_result({
+            'predicate': {},
+            'objects': []    
+        })
+        with patch.object(ConfigurableParser, 'parse', return_value=future) as mock_parser:
             resource = yield self.fact_service.get_resource(resourceURI)
             assert mock_parser.called
 
@@ -367,7 +372,9 @@ class FactServiceTest(AsyncTestCase):
         resourceURI = 'http://dbpedia.org/resource/Sample'
         expextedOutput = [{ "id": "Sample", "facts": [] }]
         with patch.object(ConfigurableParser, 'parse') as mock_parser:
-            mock_parser.return_value = expextedOutput
+            future = Future()
+            future.set_result(expextedOutput)
+            mock_parser.return_value = future
             resource = yield self.fact_service.get_resource(resourceURI)
             self.assertEqual(resource['facts'], expextedOutput)
 
