@@ -1,68 +1,8 @@
-/*.container { background-color: red;}*/
-
-body {
-	background-color: rgb(245, 246, 250);
-}
-
-header {
-	background-color: rgb(105, 133, 147);
-}
-
-.clear {
-	clear: both;
-}
-
-img[dbpedia-depiction] {
-	float: left;
-}
-
-dbpedia-resource-view{
-	display: block;
-}
-
-dbpedia-resource-view > ul{
-	padding-left: 0;
-}
-
-dbpedia-resource-view > ul > li {
-	list-style: none;
-	background-color: rgb(255, 255, 255);
-	border-radius: 5px;
-}
-
-dbpedia-grouped-facts {
-	display: block;
-	margin-bottom: 20px;
-	border: 1px solid rgb(245, 246, 250);
-}
-
-/*immediate label children on dbpedia-grouped-facts*/
-dbpedia-grouped-facts > label {
-	background-color: rgb(105, 133, 147);
-	display: block;
-	padding: 15px 0px 15px 20px;
-	margin: 0;
-	color: white;
-	font-weight: 400;
-}
-
-
-dbpedia-grouped-facts > ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-dbpedia-grouped-facts > ul > li {
-	border-bottom: 1px solid rgb(221, 221, 221);
-}
-
 
 dbpedia-discrete-fact {
 	display: block;
-	margin: 5px 0px 15px 30px;
+	margin: 5px 20px 5px 30px;
 }
-
 
 dbpedia-discrete-fact > div.object > ul > li {
 	display: inline-block;
@@ -70,7 +10,6 @@ dbpedia-discrete-fact > div.object > ul > li {
 	font-size: 75%;
 	font-weight: 700;
 	line-height: 1;
-	color: #fff;
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: baseline;

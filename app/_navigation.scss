@@ -1,0 +1,25 @@
+header {
+    background-color: rgb(105, 133, 147);
+    height: 65px;
+    margin-bottom: 15px;
+}
+
+.navbar-brand img {
+    height: 65px;
+    padding: 5px 10px;
+    vertical-align: middle;
+}
+
+.navbar-header {
+    // float: left;
+    display: inline-block;
+}
+
+.navbar-collapse {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.navbar-collapse input {
+    margin-bottom: 0;
+}

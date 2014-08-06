@@ -5,7 +5,7 @@
 		return {
 			restrict: 'E',
 			template: 
-				'<label ng-if="facts.id">{{facts.id}}</label>' +
+				'<label ng-if="facts.id" class="group-header">{{facts.id}}</label>' +
 				'<ul>' + 
 					'<li ng-repeat="fact in facts.facts">' +
 						'<dbpedia-discrete-fact fact="fact">' +

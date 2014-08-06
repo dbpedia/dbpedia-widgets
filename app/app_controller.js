@@ -4,6 +4,8 @@
 
 	angular.module('gulp-ng')
 			.controller('ApplicationCtrl', ['$scope', '$location', '$window', function ($scope, $location, $window) {
+				$scope.embed = $location.search().embed === 'true';
+
 				//$scope.resourceSelected = {};
 				$scope.$watch('resourceSelected', function (newVal, oldVal) {
 					if (newVal === oldVal){ //no change

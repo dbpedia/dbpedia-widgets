@@ -39,6 +39,7 @@ gulp.task('vendorJS', function(){
             //'./bower_components/**/*.js'
             './bower_components/angular/*.js',
             './bower_components/angular-route/*.js',
+            './bower_components/angular-sanitize/*.js',
             './bower_components/dbpedia-autosuggest/**/*.js',
             './bower_components/angular-mocks/*.js'
         ])
@@ -100,4 +101,22 @@ gulp.task('proxy', function () {
     });
 });
 
-gulp.task('default',['connect','proxy','scripts','templates','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
+
+var sass = require('gulp-sass');
+
+var paths = ['app/sass', 'app/components/sass']
+                .concat(require('node-bourbon').includePaths)
+                .concat(require('node-neat').includePaths);
+
+var options = {
+    // includePaths: require('node-bourbon').with('other/path', 'another/path')
+    // - or -
+    includePaths: paths
+};
+gulp.task('sass', function () {
+    gulp.src('app/**/*.scss')
+        .pipe(sass(options))
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task('default',['connect','proxy','scripts','templates','sass','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
