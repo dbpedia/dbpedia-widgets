@@ -39,6 +39,7 @@ gulp.task('vendorJS', function(){
             //'./bower_components/**/*.js'
             './bower_components/angular/*.js',
             './bower_components/angular-route/*.js',
+            './bower_components/angular-sanitize/*.js',
             './bower_components/dbpedia-autosuggest/**/*.js',
             './bower_components/angular-mocks/*.js'
         ])

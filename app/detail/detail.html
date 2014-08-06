@@ -1,24 +1,29 @@
-<div ng-if="!embed" class="embedd-widget" style="
-    background-color: rgb(105, 133, 147);
-    width: 100px;
-    height: 100px;
-    border-radius: 50px;
-    text-align: center;
-    line-height: 100px;
-    position: relative;
-    top: -50px;
-    /* bottom: 4px; */
-    float: right;
-">
-	<a style="
-    color: white;
-    font-size: 25px;
-    position: relative;
-    
-">
+<div ng-if="!embed" class="embed-widget">
+	<a ng-click="toggleModal()">
 		&lt;&nbsp;&gt;
 	</a>
 </div>
+
+<div class="modal" ng-if="modalOpen">
+    <div class="modal-window in">
+        <div class="modal-inner">
+            <label class="modal-close" ng-click="toggleModal()"></label>
+            <h1>Embed this widget...</h1>
+            <p class="intro">
+                Copy the embed code
+            </p>
+            <p class="body" ng-init="embed_code=getEmbedCode()">
+                <div class="code">
+                    <textarea ng-model="embed_code"></textarea>
+                </div>
+                <label>Preview...</label>
+                <div class="preview" ng-bind-html="sanitize(embed_code)">
+                </div>
+            </p>
+        </div>
+    </div>
+</div>
+
 
 <dbpedia-resource-view resource="resource" ng-if="resource">
 </dbpedia-resource-view>

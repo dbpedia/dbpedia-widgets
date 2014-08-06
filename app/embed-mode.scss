@@ -2,6 +2,8 @@
 @import "base/base";
 @import "neat";
 
+@import "modal";
+
 $base-body-color: #e6e6e6;
 $large-screen: 1000px;
 $card-border-color: $base-border-color;
@@ -260,3 +262,27 @@ dbpedia-grouped-facts > ul > li {
 //====================
 //resource grouped facts header - end
 //====================
+
+
+.embed-widget {
+    background-color: rgb(105, 133, 147);
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 100px;
+    position: relative;
+    top: -50px;
+    float: right;
+
+    a {
+        color: white;
+        font-size: 25px;
+        position: relative;
+        height: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 40px;
+        z-index:100;
+    }
+}
