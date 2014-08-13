@@ -27,8 +27,7 @@
 							'width="350"' +
 							'height="400"' +
 					'/>';
-				return iframe
-				// return $sce.trustAsHtml(iframe);
+				return iframe;
 			};
 
 			$scope.sanitize = function (str) {
