@@ -60,6 +60,11 @@ gulp.task('copy-index', function() {
         .pipe(gulp.dest('./build'));
 });
 
+gulp.task('copy-embed', function() {
+    gulp.src('./app/embed.html')    
+        .pipe(gulp.dest('./build'));
+});
+
 gulp.task('watch',function(){
     gulp.watch([
         'build/**/*.html',        
@@ -119,4 +124,4 @@ gulp.task('sass', function () {
         .pipe(gulp.dest('build'));
 });
 
-gulp.task('default',['connect','proxy','scripts','templates','sass','css','copy-index','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);
+gulp.task('default',['connect','proxy','scripts','templates','sass','css','copy-index', 'copy-embed','vendorJS','vendorCSS', 'copyDisplayConfigurations', 'watch']);

@@ -52,4 +52,18 @@ describe("detail_controller_test", function(){
     it("should set the facts on the scope when the resource is resolved", function() {
         expect(scope.resource).toEqual(expectedResource);
     });
+
+    describe('$scope.getWidgetURL', function () {
+        it('should generate URL to the embed page', function () {
+            location.path("/detail");
+            location.search("uri", "http://dbpedia.com/resource/Sample");
+            var url = location.url();
+
+            var widgetUrl = scope.getWidgetURL();
+            expect(widgetUrl).toEqual("http://server/embed.html#" + url + "&embed=true")
+        })
+        
+    });
 });
+
+

@@ -286,3 +286,9 @@ dbpedia-grouped-facts > ul > li {
         z-index:100;
     }
 }
+
+.embed-mode {
+    .embed-widget {
+        display: none;
+    }
+}

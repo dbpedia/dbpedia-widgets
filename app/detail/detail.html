@@ -12,14 +12,14 @@
             <p class="intro">
                 Copy the embed code
             </p>
-            <p class="body" ng-init="embed_code=getEmbedCode()">
+            <div class="body" ng-init="embed_code=getEmbedCode()">
                 <div class="code">
                     <textarea ng-model="embed_code"></textarea>
                 </div>
                 <label>Preview...</label>
                 <div class="preview" ng-bind-html="sanitize(embed_code)">
                 </div>
-            </p>
+            </div>
         </div>
     </div>
 </div>

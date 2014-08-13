@@ -36,7 +36,14 @@
 			};
 
 			$scope.getWidgetURL = function () {
-				return $location.absUrl() + "&embed=true";
+				var p = $location.protocol();
+				var h = $location.host();
+				var port = $location.port();
+				port = port !== 80 ? ":" + port : "";
+				var url = $location.url();
+				var path = 'embed.html';
+				
+				return p + "://" + h + port + "/" + path + "#" +  url;
 			};
 
 // 			$scope.resource = {
