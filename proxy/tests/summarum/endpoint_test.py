@@ -10,6 +10,7 @@ from tornado.httpclient import AsyncHTTPClient
 from tornado.gen import coroutine
 from tornado.testing import AsyncTestCase
 from tornado.testing import gen_test
+from tornado.httpclient import HTTPError
 
 from rdflib import Graph
 from rdflib.term import URIRef, Literal
@@ -33,12 +34,12 @@ class EndpointTest(AsyncTestCase):
 
 
     @patch.object(AsyncHTTPClient, 'fetch')
-    def test_should_request_the_top_1000_rankings_for_the_given_resource(self, fetch):
+    def test_should_request_the_top_200_rankings_for_the_given_resource(self, fetch):
         resource_uri = 'http://dbpedia.org/resource/Sample'
         self.summarum_endpoint.fetch(resource_uri)
         
         endpoint_url = "http://km.aifb.kit.edu/services/summa/summarum"
-        url = endpoint_url + "?entity=" + resource_uri + "&k=1000"
+        url = endpoint_url + "?entity=" + resource_uri + "&topK=200"
         fetch.assert_called_once_with(url, headers= ANY)
 
 
@@ -79,6 +80,17 @@ class EndpointTest(AsyncTestCase):
         
         result = yield self.summarum_endpoint.fetch(resourceURI)
         self.assertEquals(result, expected_result)
+
+    @gen_test
+    def test_fetch_returns_none_when_request_fails(self):
+        uri = 'http://dbpedia.com/resource/Sample'
+
+        client = Mock()
+        client.fetch = Mock(side_effect=HTTPError(500))
+
+        self.summarum_endpoint = Endpoint(http_client=client)
+        response = yield self.summarum_endpoint.fetch(uri)
+        self.assertEquals(response, None)
 
     def test_get_query_generates_sparql_for_given_resource(self):
         uri = 'http://dbpedia.com/resource/Sample'
@@ -134,3 +146,34 @@ class EndpointTest(AsyncTestCase):
             (p_occupation, o_actor, v_actor)
         ]
         self.assertEqual(result, expected_result)
+
+
+    @gen_test
+    def test_fetch_and_parse_returns_an_empty_list_when_parse_returns_none(self):
+        uri = 'http://dbpedia.com/resource/Sample'
+
+        future = Future()
+        future.set_result(None)
+        self.summarum_endpoint.fetch = Mock(return_value=future)
+
+        response = yield self.summarum_endpoint.fetch_and_parse(uri)
+        self.assertEquals(response, [])
+
+    @gen_test
+    def test_fetch_and_parse_returns_the_output_from_parse(self):
+        uri = 'http://dbpedia.com/resource/Sample'
+
+        future = Future()
+        #any truthy value should be set as the result
+        #fetch_and_parse checks that there's a response before calling parse
+        future.set_result("turtle")
+        self.summarum_endpoint.fetch = Mock(return_value=future)
+
+
+        expected_result = [1, 2, 3]
+        self.summarum_endpoint.parse = Mock(return_value=expected_result)
+
+        response = yield self.summarum_endpoint.fetch_and_parse(uri)
+        self.assertEquals(response, expected_result)
+
+

@@ -1,4 +1,5 @@
 from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import HTTPError
 from tornado.gen import coroutine
 
 from rdflib import Graph
@@ -18,12 +19,21 @@ class Endpoint(object):
     @coroutine
     def fetch(self, uri):
         endpoint_url = "http://km.aifb.kit.edu/services/summa/summarum"
-        url = endpoint_url + "?entity=" + uri + "&k=1000"
-        print(url)
-        headers = dict(accept = 'text/turtle')
+        result = None
 
-        response = yield self.http_client.fetch(url, headers = headers)
-        return response.body
+        try:
+            #the topK parameter should be limited to 200
+            #anything bigger makes the endpoint freakout and respond with an 
+            #error
+            url = endpoint_url + "?entity=" + uri + "&topK=200"
+            headers = dict(accept = 'text/turtle')
+            response = yield self.http_client.fetch(url, headers = headers)
+            result = response.body
+        except HTTPError as e:
+            ## TODO: Log exception
+            pass
+
+        return result
 
     def get_query(self, uri):
         return string.Template(
@@ -60,7 +70,10 @@ class Endpoint(object):
     @coroutine
     def fetch_and_parse(self, uri):
         turtle = yield self.fetch(uri)
-        return self.parse(uri, turtle)
+        result = []
+        if turtle:
+            result = self.parse(uri, turtle)
+        return result
 
 class RankingService(object):
     """docstring for RankingService"""
