@@ -201,6 +201,10 @@ dbpedia-grouped-facts > ul > li {
     border-bottom: 1px solid rgb(221, 221, 221);
 }
 
+.pager {
+    display: none;
+}
+
 .embed-mode {
     .grouped-facts-container {
         @include fill-parent-context;
@@ -210,7 +214,7 @@ dbpedia-grouped-facts > ul > li {
 
         .generic-facts, > dbpedia-grouped-facts {
             background-color: rgb(245, 246, 250);
-            display: inline-block;
+            display: none;
             vertical-align: top;
             width: 100%;
             height: 100%;
@@ -223,6 +227,27 @@ dbpedia-grouped-facts > ul > li {
                 overflow-y: auto;
             }
         }
+
+        .pager {
+            display: block;
+            position: absolute;
+            z-index: 1;
+            height: 36px;
+            width: 100%;
+            line-height: 36px;
+
+            .prev {
+                position: absolute;
+                top: 0;
+                left: 10px;
+            }
+
+            .next {
+                position: absolute;
+                top: 0;
+                right: 10px;
+            }
+        }
     }
 
     .grouped-facts-container, dbpedia-grouped-facts {
@@ -232,6 +257,10 @@ dbpedia-grouped-facts > ul > li {
             white-space: normal;
             overflow: scroll;
         }
+    }
+
+    .active-facts {
+        display: inline-block !important;
     }
 }
 
