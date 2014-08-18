@@ -31,9 +31,8 @@ def cache_facts(fn):
             return response
 
         #look for the facts in the cache
-        uri = args[0]
+        uri = args[1] #get the URI from the parameters
         response = yield tornado.gen.Task(globals.CACHING_STORE.get, uri)
-        
         #check if something was found
         if not response:
             #nothing found
