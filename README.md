@@ -9,6 +9,7 @@ Simple embeddable widgets
     NodeJS
     Gulp
     Bower
+    Redis server
 
 
 ## Setting Up ##
