@@ -42,6 +42,8 @@ Simple embeddable widgets
 
 
 ## Running ##
+    #start a local redis server on the default port
+    redis-server &
 
     #activate the virtualenv environment - only when using virtualenv
     source env/bin/activate
