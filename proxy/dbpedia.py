@@ -11,6 +11,11 @@ def cache_facts(fn):
     @wraps(fn)
     def wrapper(*args, **kargs):
         print('checking cache')
+        #call the wrapped function immediately when there is 
+        #no caching store. This is mainly to keep FactService unit tests passing
+        if not hasattr(globals, 'CACHING_STORE'):
+            response = yield fn(*args, **kargs)
+            return response
         uri = args[0]
         response = yield tornado.gen.Task(globals.CACHING_STORE.get, uri)
         
