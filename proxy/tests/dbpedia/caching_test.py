@@ -69,6 +69,12 @@ class CachingTest(AsyncTestCase):
         globals.setup_caching_store()
         self.assertTrue(mock_client.connect.called)
 
+    # @gen_test
+    # def test_decorator_calls_wrapped_fn_immediately_when_no_caching_store_is_found(self):
+        # print(globals.CACHING_STORE)
+        # response = yield self._decorated_fn('http://dbpedia.com/resource/Sample')
+        # self.assertTrue(self._wrapped_fn.called)
+        # self.assertIsNone(response)
 
     @gen_test
     @patch.object(tornadoredis, 'Client')

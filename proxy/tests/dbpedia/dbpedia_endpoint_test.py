@@ -13,7 +13,7 @@ from tornado.testing import gen_test
 from tornado.concurrent import Future
 
 import string
-from DBpediaEndpoint import DBpediaEndpoint
+from dbpedia import DBpediaEndpoint
 import json
 
 

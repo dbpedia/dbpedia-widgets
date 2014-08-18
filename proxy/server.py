@@ -1,7 +1,7 @@
 import tornado.ioloop
 import tornado.web
-from FactService import FactService
-from FactService import ResourceRedirect
+from dbpedia import FactService
+from dbpedia import ResourceRedirect
 from tornado.gen import coroutine
 import json
 import globals
@@ -25,9 +25,9 @@ class ResourceHandler(tornado.web.RequestHandler):
         except ResourceRedirect as e:
             self.add_header('Location', '/resource/' + e.redirect_resource)
             self.set_status(303) #See other
-        # except Exception as e:
-            # self.write(json.dumps({}))
-            # self.set_status(502) #Bad Gateway
+        except Exception as e:
+            self.write(json.dumps({}))
+            self.set_status(502) #Bad Gateway
 
         
         

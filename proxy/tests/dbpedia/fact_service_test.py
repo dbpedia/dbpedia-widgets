@@ -10,9 +10,9 @@ from tornado.testing import AsyncTestCase
 from tornado.testing import gen_test
 
 import string
-from DBpediaEndpoint import DBpediaEndpoint
-from FactService import FactService
-from FactService import ResourceRedirect
+from dbpedia import DBpediaEndpoint
+from dbpedia import FactService
+from dbpedia import ResourceRedirect
 from ConfigurableParser import ConfigurableParser
 import json
 from tornado.concurrent import Future

@@ -6,19 +6,18 @@ from unittest.mock import patch
 from tornado.testing import AsyncHTTPTestCase
 from tornado.testing import AsyncTestCase
 import tornado.web
-from server import ResourceHandler
-
-import json
-
-# from server import DBpediaEndpoint
-
-from FactService import FactService
-from FactService import ResourceRedirect
-
 from tornado.concurrent import Future
 from tornado.testing import gen_test
+import json
+
+from dbpedia import FactService
+from dbpedia import ResourceRedirect
+from server import ResourceHandler
+
+
 
 class ResourceHandlerTest(AsyncHTTPTestCase):
+
     """docstring for ProxyServerTest"""
 
     def get_app(self):

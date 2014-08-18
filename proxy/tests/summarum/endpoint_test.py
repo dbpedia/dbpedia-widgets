@@ -17,8 +17,8 @@ from rdflib.term import URIRef, Literal
 
 
 #add the root proxy directory to the sys.path
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
+# import sys, os
+# sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 from summarum import Endpoint
 
