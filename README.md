@@ -10,6 +10,8 @@ Simple embeddable widgets
     Gulp
     Bower
     Redis server
+        Ubuntu: apt-get install redis-server
+        OS X w/ Homebrew: brew install redis
 
 
 ## Setting Up ##
