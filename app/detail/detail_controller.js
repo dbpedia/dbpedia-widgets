@@ -67,11 +67,11 @@
 				var p = $location.protocol();
 				var h = $location.host();
 				var port = $location.port();
-				port = port !== 80 ? ":" + port : "";
+				port = port !== 80 ? ':' + port : '';
 				var url = $location.url();
 				var path = 'embed.html';
 				
-				return p + "://" + h + port + "/" + path + "#" +  url;
+				return p + '://' + h + port + '/' + path + '#' +  url;
 			};
 		});
 })();

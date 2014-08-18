@@ -16,7 +16,7 @@
 			* @returns {Promise}
 			*/
 			fetch: function (uri) {
-				return $http.get(proxyLocation + "/" + uri);
+				return $http.get(proxyLocation + '/' + uri);
 			}
 		};
 	}

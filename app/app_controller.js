@@ -24,7 +24,7 @@
 				});
 
 				//notify GA that the page changed
-				$scope.$on('$routeChangeSuccess', function (evnt) {
+				$scope.$on('$routeChangeSuccess', function () {
 					$window.ga('send', 'pageview', $location.url());
 				});
 			}]);

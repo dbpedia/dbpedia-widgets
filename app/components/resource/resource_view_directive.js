@@ -54,7 +54,7 @@
                 scope.hasPrevious = function () {
                     //check the active section is not the 'About' section
                     return scope.activeSection !== 'About';
-                }
+                };
 
                 /**
                 * Checks if there is a next section to display
@@ -80,7 +80,7 @@
                 scope.showPrevious = function () {
                     if (scope.activeIndex === 0) {
                         //move to the 'About' section
-                        scope.activeSection = 'About'
+                        scope.activeSection = 'About';
                     }
                     else
                     {
@@ -88,7 +88,7 @@
                         scope.activeIndex--;
                         scope.activeSection = scope.resource.facts[scope.activeIndex].id;
                     }
-                }
+                };
 
                 /**
                 * Activates/displays the next section
@@ -105,7 +105,7 @@
                         scope.activeIndex++;
                         scope.activeSection = scope.resource.facts[scope.activeIndex].id;
                     }
-                }
+                };
 
                 /**
                 * generate the classes for a section
@@ -120,7 +120,7 @@
                     return {
                         'active-facts': scope.activeSection === id
                     };
-                }
+                };
             }
         };
     }
