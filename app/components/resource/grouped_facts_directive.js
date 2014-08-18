@@ -1,6 +1,14 @@
 (function(){
 	'use strict';
 
+	/**
+	* Displays all the resource facts that form part of the group.
+	* Facts are grouped into sets of related facts and 
+	* this directive is in charge of displaying each set of
+	* grouped facts as an individual section
+	*
+	* @example facts = { id: 'group name', facts: ['list of related facts'] }
+	*/
 	function dbpediaGroupedFacts() {
 		return {
 			restrict: 'E',
