@@ -8,7 +8,7 @@ import string
 
 class Endpoint(object):
     """
-        The sole purpose of this class is to fetch the dbpedia pagerank datasets from
+        The sole purpose of this class is to fetch the dbpedia pagerank rankings from
         summarum (http://km.aifb.kit.edu/services/summa/summarum). 
     """
 
@@ -18,6 +18,8 @@ class Endpoint(object):
 
     @coroutine
     def fetch(self, uri):
+        """Retrieves rankings from summarum as a turtle dataset
+        """
         endpoint_url = "http://km.aifb.kit.edu/services/summa/summarum"
         result = None
 
@@ -36,6 +38,15 @@ class Endpoint(object):
         return result
 
     def get_query(self, uri):
+        """Generates SPARQL query to retrieve rankings
+
+        This SPARQL query is executed against a graph created
+        from a turtle dataset.
+
+        The resource were looking for may be an object or subject so
+        look for it as an object and subject individually and union
+        the results.
+        """
         return string.Template(
             """
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -60,23 +71,41 @@ class Endpoint(object):
             ORDER BY DESC(?v)""").substitute(resource=uri)
 
     def parse(self, uri, turtle):
+        """Parses turtle response from the summarum endpoint
+
+        Parse will create a graph from the turtle response and query
+        for the rankings. Once the rankings are retrieved, they will
+        be converted to a list of tuples with primative values
+        """
+        #create a graph and parse the turtle dataset
         g = Graph()
         g.parse(data = turtle, format='n3')
 
+        #generate the query
         sparql = self.get_query(uri)
+        #get the results
         results = g.query(sparql)
+        
+        #simplify the results; remove the URINode wrappers
         return [(str(p), str(o), float(v)) for p, o, v in results]
 
     @coroutine
     def fetch_and_parse(self, uri):
+        """Fetches pagerank dataset and parses it all in one.
+        """
         turtle = yield self.fetch(uri)
         result = []
         if turtle:
             result = self.parse(uri, turtle)
         return result
 
+
+
 class RankingService(object):
-    """docstring for RankingService"""
+    """A service used to rank the facts of a resource.
+
+    The facts are ranked according to the rankings from the summarum endpoint.
+    """
     def __init__(self, uri, endpoint = Endpoint()):
         super(RankingService, self).__init__()
         self.uri = uri
@@ -84,16 +113,24 @@ class RankingService(object):
 
     @coroutine
     def rank(self, facts):
+        """Ranks the given facts
+        """
+        #load the rankinds for the given resource
+        #and cache for furture use
         if not hasattr(self, 'rankings'):
            self.rankings = yield self.endpoint.fetch_and_parse(self.uri)
         
+        #return the sorted facts
         return self.sort(facts)
 
     def sort(self, facts):
+        """Arranges the given facts to appear in order of importance
+        """
+
         #get the predicates for this set of facts
         predicates = facts['predicate']['value']
 
-        #remove the rankings that dont apply.
+        #remove the rankings that dont apply to the predicates
         matches = [(p, o, v) for (p, o, v) in self.rankings if p == predicates or p in predicates]
 
         #reverse the list of matches

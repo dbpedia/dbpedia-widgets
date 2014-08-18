@@ -11,6 +11,15 @@ from ConfigurableParser import ConfigurableParser
 from summarum import RankingService
 
 def cache_facts(fn):
+    """Redis caching
+
+    Caches the facts returned from the FactService into a redis store.
+    The 'CACHING_STORE' is a long-running redis client defined in the globals
+    module and instantiated on server start.
+
+    The key used to set/get is the resource URI passed in as a
+    function parameter
+    """
     
     @coroutine
     @wraps(fn)
@@ -21,42 +30,69 @@ def cache_facts(fn):
             response = yield fn(*args, **kargs)
             return response
 
+        #look for the facts in the cache
         uri = args[0]
         response = yield tornado.gen.Task(globals.CACHING_STORE.get, uri)
         
+        #check if something was found
         if not response:
+            #nothing found
+            #execute the original function
             response = yield fn(*args, **kargs)
+           
+            #cache the results for future use
+            #serialize the response so it's properly encoded
             yield tornado.gen.Task(globals.CACHING_STORE.set, uri, json.dumps(response))
         else:
+            #convert to JSON
             response = json.loads(response)
 
         return response
+
     return wrapper
 
 
-
-
 class DBpediaEndpoint(object):
-    """docstring for DBpediaEndpoint"""
+    """Retrieves all the dbpedia facts for a given resource URI
+
+    The facts are retrieved by running a set of SPARQL queries 
+    against the public dbpedia endpoint(http://dbpedia.com/sparql).
+    We request all the triples that have the requested URI
+    in the subject or object position. The labels for each 
+    of the connecting facts are also retrieved.
+    """
     @coroutine
     def fetch(self, uri):
         endpointURL = 'http://dbpedia.org/sparql'
         http_client = AsyncHTTPClient()
         headers = dict(accept = 'application/json')
+        #run the requests to the sparql endpoint in parallel
         facts_response, inverse_facts_response = yield [
             http_client.fetch(self.facts_url(uri), headers = headers), 
             http_client.fetch(self.inverse_facts_url(uri), headers = headers)
         ]
+
         facts = self.parse_response(facts_response)
         inverse_facts = self.parse_response(inverse_facts_response)
         return facts + inverse_facts
 
     def parse_response(self, response):
+        """Parses response from the sparql endpoint
+
+            Parse the response.body
+            fix faulty unicode encodings from endpoint
+            covert to JSON
+            return the bindings nested in response
+        """
         return json.loads(response.body.replace(b"\U", b"\u").decode())['results']['bindings']
 
 
     def facts_url(self, uri):
+        """Generates the URL to retrieve the english facts for a resource
+        """
         endpointURL = 'http://dbpedia.org/sparql'
+
+        #generate the SPARQL query
         sparql = string.Template(
             """
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -71,9 +107,14 @@ class DBpediaEndpoint(object):
             }"""
             ).substitute(resource=uri)
 
+        #create the url
         return url_concat(endpointURL, dict(query=sparql))
 
     def inverse_facts_url(self, uri):
+        """Generates the URL to retrieve the english inverse facts for a resource
+
+        Inverse facts are triples with the requested URI in the subject position
+        """
         endpointURL = 'http://dbpedia.org/sparql'
 
         #this query is similar to query to retrieve all the outgoing facts from a given resource
@@ -97,45 +138,55 @@ class DBpediaEndpoint(object):
             }"""
             ).substitute(resource=uri)
 
+        #create the url
         return url_concat(endpointURL, dict(query=sparql))
 
 
-
 class ResourceRedirect(Exception):
-    """docstring for ResourceRedirect"""
+    """An exception indicating that a dbpedia resource redirects
+    to another dbpedia resource.
+    """
     def __init__(self, requested_resource, redirect_resource):
         Exception.__init__(self, "The resource requested redirects to another resource.")
+        #set the resource requested and the resource it's being
+        #redirected to.
         self.requested_resource = requested_resource
         self.redirect_resource = redirect_resource
         
 
 class FactService(object):
-    """docstring for DBpediaEndpoint"""
+    """Encapsulates all the steps it takes to generate the facts
+    for a single resource
+    """
     
     def __init__(self, endpoint = DBpediaEndpoint()):
         self.endpoint = endpoint
 
     def filter_facts(self, facts, uri):
+        """Returns the facts that match URI.
+
+        The URI passed in refers to a predicate.
+        """
         return [node["o"]["value"] for node in facts if node["p"]["value"] == uri]
 
     @cache_facts
     @coroutine
     def get_resource(self, uri):
-        # facts = []
-        # try:
-        #     pass
-        # except Exception as e:
-        #     #this is an error we cant recover for
-        #     #the resource is not available
-        #     raise
+        """Retrieves the requested resource from the dbpedia endpoint, parses it according 
+        to the defined configurations, and ranks the resulting facts using the summarum
+        ranking service
+        """
 
         facts = yield self.endpoint.fetch(uri)
 
+        #check if this a redirect
         redirectNodes = self.filter_facts(facts, "http://dbpedia.org/ontology/wikiPageRedirects")
-
         if redirectNodes:
             raise ResourceRedirect(uri, redirectNodes[0])
 
+        #start constructing the facts object
+
+        #get the generic facts
         labelNode = self.filter_facts(facts, "http://www.w3.org/2000/01/rdf-schema#label")
         depectionNode = self.filter_facts(facts, "http://xmlns.com/foaf/0.1/depiction")
         thumbnailNode = self.filter_facts(facts, "http://dbpedia.org/ontology/thumbnail")
@@ -156,11 +207,9 @@ class FactService(object):
         if depectionNode:
             result['depiction'] = depectionNode[0]
 
-        # turtle = yield PageRankEndpoint().fetch(uri)
-        # ranker = PageRankRanker(turtle)
-
+        #create the service in charge of ranking the facts
         ranking_service = RankingService(uri)
-        print('ranking_service started')
 
+        #generate the facts using the configurations
         result['facts'] = yield ConfigurableParser(facts, ranker = ranking_service).parse()
         return result
