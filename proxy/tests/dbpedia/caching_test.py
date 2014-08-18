@@ -17,6 +17,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
 
 import tornadoredis
 import globals
+import json
 from dbpedia import cache_facts
 
 class CachingTest(AsyncTestCase):
@@ -94,7 +95,7 @@ class CachingTest(AsyncTestCase):
             'label': 'A Sample Label'
         }
         def execute_get_callback(*args, **kargs):
-            kargs['callback'](expected_response)
+            kargs['callback'](json.dumps(expected_response))
 
         globals.CACHING_STORE.get.side_effect = execute_get_callback
 
