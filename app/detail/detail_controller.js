@@ -64,14 +64,14 @@
 			* @returns {string}
 			*/
 			$scope.getWidgetURL = function () {
-				var p = $location.protocol();
-				var h = $location.host();
-				var port = $location.port();
-				port = port !== 80 ? ':' + port : '';
-				var url = $location.url();
-				var path = 'embed.html';
-				
-				return p + '://' + h + port + '/' + path + '#' +  url;
+				var absUrl = $location.absUrl();
+
+				if (absUrl.indexOf('index.html') !== -1) {
+					return absUrl.replace('index.html', 'embed.html');
+				}
+				else {
+					return absUrl.replace('/#/', '/embed.html#/');
+				}
 			};
 		});
 })();

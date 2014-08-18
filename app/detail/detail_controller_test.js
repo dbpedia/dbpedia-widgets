@@ -60,9 +60,8 @@ describe("detail_controller_test", function(){
             var url = location.url();
 
             var widgetUrl = scope.getWidgetURL();
-            expect(widgetUrl).toEqual("http://server/embed.html#" + url + "&embed=true")
-        })
-        
+            expect(widgetUrl).toEqual("http://server/embed.html#" + url)
+        });
     });
 });
 
