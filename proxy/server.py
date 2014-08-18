@@ -4,6 +4,7 @@ from FactService import FactService
 from FactService import ResourceRedirect
 from tornado.gen import coroutine
 import json
+import globals
 
 class ResourceHandler(tornado.web.RequestHandler):
     """
@@ -24,9 +25,9 @@ class ResourceHandler(tornado.web.RequestHandler):
         except ResourceRedirect as e:
             self.add_header('Location', '/resource/' + e.redirect_resource)
             self.set_status(303) #See other
-        except Exception as e:
-            self.write(json.dumps({}))
-            self.set_status(502) #Bad Gateway
+        # except Exception as e:
+            # self.write(json.dumps({}))
+            # self.set_status(502) #Bad Gateway
 
         
         
@@ -34,6 +35,7 @@ class ResourceHandler(tornado.web.RequestHandler):
 
 
 def main():
+    globals.setup_caching_store()
     application = tornado.web.Application([
             #a single request argument, the resource URI, will be passed in the URL
             #regex will match any amount of non-whitespace characters
@@ -44,5 +46,8 @@ def main():
     tornado.ioloop.IOLoop.instance().start()
 
 
+print('imported main')
 if __name__ == '__main__':
+    print('running main')
     main()
+

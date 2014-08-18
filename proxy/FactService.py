@@ -4,6 +4,7 @@ from DBpediaEndpoint import DBpediaEndpoint
 from ConfigurableParser import ConfigurableParser
 
 from summarum import RankingService
+import dbpedia
 
 class ResourceRedirect(Exception):
     """docstring for ResourceRedirect"""
@@ -22,6 +23,7 @@ class FactService(object):
     def filter_facts(self, facts, uri):
         return [node["o"]["value"] for node in facts if node["p"]["value"] == uri]
 
+    @dbpedia.cache_facts
     @coroutine
     def get_resource(self, uri):
         # facts = []
