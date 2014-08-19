@@ -1,0 +1,323 @@
+@import "bourbon";
+@import "base/base";
+@import "neat";
+
+@import "modal";
+
+$base-body-color: #e6e6e6;
+$large-screen: 1000px;
+$card-border-color: $base-border-color;
+$card-border: 1px solid $card-border-color;
+$card-background: lighten($card-border-color, 10);
+$card-header-background: $card-background;
+$card-hover-background: lighten($card-background, 5);
+$card-image-background: #DBD199;
+$card-image-hover-background: lighten($card-image-background, 5);
+$card-stats-color: lighten($base-accent-color, 10);
+
+@mixin fill-parent-context(){
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+@import "navigation";
+
+
+body {
+    background-color: rgb(245, 246, 250);
+}
+
+.container {
+    @include outer-container;
+    min-width: 700px;
+}
+
+.embed-mode {
+    overflow: hidden;
+    height: 100%;
+    padding: 10px;
+
+    body {
+        background: transparent;
+    }
+
+    body, .container, dbpedia-resource-view {
+        height: 100%;
+    }
+    
+    .container {
+        padding: 0;
+        min-width: initial; //remove width requirement used in app-mode
+    }
+}
+
+
+.card {
+    @include transition (all 0.2s ease-in-out);
+    background-color: $card-background;
+    border-radius: $base-border-radius;
+    border: $card-border;
+    box-shadow: 0 2px 4px darken($base-body-color, 10);
+    position: relative;
+
+    @include media($large-screen) {
+        @include span-columns(4);  
+        @include omega(3n);
+    }
+}
+
+.card-header {
+    @include transition (all 0.2s ease-in-out);
+    background-color: $card-header-background;
+    border-bottom: $card-border;
+    border-radius: $base-border-radius $base-border-radius 0 0;
+    font-weight: bold;
+    padding: $base-line-height/3 $gutter/2;
+    height: 40px;
+    // text-align: center;
+}
+
+//====================
+//resource view - start
+//====================
+
+dbpedia-resource-view {
+    position: relative;
+    display: block;
+}
+
+.embed-mode {
+    dbpedia-resource-view {
+        @extend .card;
+    }
+}
+
+//====================
+//resource view - end
+//====================
+
+
+
+//====================
+//resource depiction - start
+//====================
+
+.resource-depiction {
+    display: inline-block;
+}
+
+.embed-mode {
+    .resource-depiction {
+        // reset the styles used for the app-mode
+        display: block; //dont display side-by-side
+        overflow: hidden;
+        text-align: center;
+        height: 140px;
+    }
+
+    img[dbpedia-depiction] {
+        max-height: 120px;
+        max-width: 120px;
+        text-align: center;
+        border-radius: 6px;
+        border: 2px solid gray;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}
+
+//====================
+//resource depiction - end
+//====================
+
+
+//====================
+//resource header - start
+//====================
+
+.resource-header {
+    display: inline-block;
+    vertical-align: top;
+    position: absolute;
+    padding: 30px;
+
+    .comment {
+        font-size: 0.8em;
+    }
+}
+
+.embed-mode {
+    .resource-header {
+        // reset the styles used for the app-mode
+        display: block; //dont display side-by-side
+        vertical-align: initial; //dont position header content to top
+        position: initial; //remove absolute positioning
+        text-align: center;
+        @extend .card-header;
+
+        .comment {
+            display: none;
+        }
+    }
+}
+
+//====================
+//resource header - end
+//====================
+
+
+
+//====================
+//resource grouped facts - start
+//====================
+
+.grouped-facts-container {
+    font-size: .9em;
+    line-height: 1.5em;
+ 
+    .generic-facts {
+        display: none;
+    }
+}
+
+dbpedia-grouped-facts {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid rgb(245, 246, 250);
+    background-color: rgb(255, 255, 255);
+}
+
+dbpedia-grouped-facts > ul {
+    white-space: normal;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+dbpedia-grouped-facts > ul > li {
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.pager {
+    display: none;
+}
+
+.embed-mode {
+    .grouped-facts-container {
+        @include fill-parent-context;
+        overflow: hidden;
+        white-space: nowrap;
+        margin-top: 180px;
+
+        .generic-facts, > dbpedia-grouped-facts {
+            background-color: rgb(245, 246, 250);
+            display: none;
+            vertical-align: top;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            margin-bottom: 0;
+
+            > ul {
+                @include fill-parent-context;
+                margin-top: 36px;
+                overflow-y: auto;
+            }
+        }
+
+        .pager {
+            display: block;
+            position: absolute;
+            z-index: 1;
+            height: 36px;
+            width: 100%;
+            line-height: 36px;
+
+            .prev {
+                position: absolute;
+                top: 0;
+                left: 10px;
+            }
+
+            .next {
+                position: absolute;
+                top: 0;
+                right: 10px;
+            }
+        }
+    }
+
+    .grouped-facts-container, dbpedia-grouped-facts {
+        .content {
+            @include fill-parent-context;
+            margin-top: 40px;
+            white-space: normal;
+            overflow: scroll;
+        }
+    }
+
+    .active-facts {
+        display: inline-block !important;
+    }
+}
+
+//====================
+//resource grouped facts - end
+//====================
+
+
+//====================
+//resource grouped facts header - start
+//====================
+
+.group-header {
+    @extend .card-header;
+    background-color: rgb(105, 133, 147);
+    color: white;
+    height: 36px;
+}
+
+.embed-mode {
+    .group-header {
+        text-align: center;
+        background-color: $card-header-background;
+        color: #333;
+    }
+}
+
+//====================
+//resource grouped facts header - end
+//====================
+
+
+.embed-widget {
+    background-color: rgb(105, 133, 147);
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    text-align: center;
+    line-height: 100px;
+    position: relative;
+    top: -50px;
+    float: right;
+
+    a {
+        color: white;
+        font-size: 25px;
+        position: relative;
+        height: 40px;
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 40px;
+        z-index:100;
+    }
+}
+
+.embed-mode {
+    .embed-widget {
+        display: none;
+    }
+}
